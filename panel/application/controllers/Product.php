@@ -161,4 +161,19 @@ class Product extends CI_Controller{
         }
     }
 
+    public function delete($id){
+        $delete = $this->product_model->delete(
+            array(
+                "id" => $id
+            )
+        );
+
+        if ($delete) {
+            //TODO alert sistemi eklenecek
+            redirect(base_url("product"));
+        }else{
+            redirect(base_url("product"));
+        }
+    }
+
 }
