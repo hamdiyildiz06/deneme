@@ -8,92 +8,47 @@
     </div><!-- END column -->
     <div class="col-md-12">
         <div class="widget p-lg">
-
-            <div class="alert alert-info text-center ">
-                <h5 class="alert-title">Kayıt Bulunamadı</h5>
-                <p>Burada herhangi bir veri bulunamamaktadır. Eklemek için lütfen <a href="#">Tıklayınız</a></p>
-            </div>
-
-            <table class="table table-hover table-striped">
-                <thead>
-                <tr>
-                    <th>#id</th>
-                    <th>url</th>
-                    <th>Başlık</th>
-                    <th>Açıklama</th>
-                    <th>Durumu</th>
-                    <th>işlem</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>monitor-askisi</td>
-                    <td>Monitör Askısı</td>
-                    <td>360 derece kullanılabilein monitör askısıdır ...</td>
-                    <td>
-                        <input id="switch-2-2" type="checkbox" data-switchery data-color="#10c469" checked />
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-danger btn-outline"><i class="fa fa-trash"></i> Sil</a>
-                        <a href="#" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>monitor-askisi</td>
-                    <td>Monitör Askısı</td>
-                    <td>360 derece kullanılabilein monitör askısıdır ...</td>
-                    <td>
-                        <input id="switch-2-2" type="checkbox" data-switchery data-color="#10c469" checked />
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-danger btn-outline"><i class="fa fa-trash"></i> Sil</a>
-                        <a href="#" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>monitor-askisi</td>
-                    <td>Monitör Askısı</td>
-                    <td>360 derece kullanılabilein monitör askısıdır ...</td>
-                    <td>
-                        <input id="switch-2-2" type="checkbox" data-switchery data-color="#10c469" checked />
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-danger btn-outline"><i class="fa fa-trash"></i> Sil</a>
-                        <a href="#" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>monitor-askisi</td>
-                    <td>Monitör Askısı</td>
-                    <td>360 derece kullanılabilein monitör askısıdır ...</td>
-                    <td>
-                        <input id="switch-2-2" type="checkbox" data-switchery data-color="#10c469" checked />
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-danger btn-outline"><i class="fa fa-trash"></i> Sil</a>
-                        <a href="#" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>monitor-askisi</td>
-                    <td>Monitör Askısı</td>
-                    <td>360 derece kullanılabilein monitör askısıdır ...</td>
-                    <td>
-                        <input id="switch-2-2" type="checkbox" data-switchery data-color="#10c469" checked />
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-danger btn-outline"><i class="fa fa-trash"></i> Sil</a>
-                        <a href="#" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
+            <?php if (empty($items)){ ?>
+                <div class="alert alert-info text-center ">
+                    <h5 class="alert-title">Kayıt Bulunamadı</h5>
+                    <p>Burada herhangi bir veri bulunamamaktadır. Eklemek için lütfen <a href="#">Tıklayınız</a></p>
+                </div>
+            <?php }else{ ?>
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>#id</th>
+                            <th>url</th>
+                            <th>Başlık</th>
+                            <th>Açıklama</th>
+                            <th>Durumu</th>
+                            <th>işlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                <?php foreach ($items as $item): ?>
+                    <tr>
+                        <td><?= $item->id; ?></td>
+                        <td><?= $item->url; ?></td>
+                        <td><?= $item->title; ?></td>
+                        <td><?= $item->description; ?></td>
+                        <td>
+                            <input
+                                    type="checkbox"
+                                    data-switchery
+                                    data-color="#10c469"
+                                    <?= ($item->isActive) ? "checked" : "";  ?>
+                            />
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-danger btn-outline"><i class="fa fa-trash"></i> Sil</a>
+                            <a href="#" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php } ?>
         </div><!-- .widget -->
     </div><!-- END column -->
 </div>
