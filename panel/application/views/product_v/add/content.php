@@ -12,6 +12,9 @@
                     <div class="form-group">
                         <label for="exampleInputEmail1">Başlık</label>
                         <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Başlık" name="title">
+                        <?php if (isset($form_error)){ ?>
+                            <small class="input-form-error pull-right"><?= form_error("title"); ?></small>
+                        <?php } ?>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Açıklama</label>

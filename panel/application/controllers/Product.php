@@ -46,6 +46,8 @@ class Product extends CI_Controller{
         // kurallar yazılır
         $this->form_validation->set_rules("title","Başlık","required|trim");
 
+
+        //Hata mesajlarının Oluşturulması
         $this->form_validation->set_message(
             array(
                 "required" => "<strong>{field}</strong> alanı boş bırakılamaz"
@@ -56,14 +58,16 @@ class Product extends CI_Controller{
         $validate = $this->form_validation->run();
 
         if($validate){
-            // başarılı ise
-            //kayıt işlemi başlar
-
             echo "Kayıt işlemleri başalar";
         }else{
-            // başarısız ise
-            // Hata ekranına yönlendirilir
-            echo validation_errors();
+            $viewData = new stdClass();
+
+            /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+            $viewData->viewFolder    = $this->viewFolder;
+            $viewData->subViewFolder = "add";
+            $viewData->form_error = true;
+
+            $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
         }
 
 
