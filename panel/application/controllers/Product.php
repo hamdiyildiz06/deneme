@@ -69,9 +69,10 @@ class Product extends CI_Controller{
             );
 
             if($insert){
-                echo "kayıt işlemi başarılıdır ";
+                //TODO alert sistemi eklenecek
+                redirect(base_url("product"));
             }else{
-                echo "kayıt işlemi başarısızdır ";
+                redirect(base_url("product"));
             }
         }else{
             $viewData = new stdClass();
