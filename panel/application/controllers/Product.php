@@ -41,7 +41,37 @@ class Product extends CI_Controller{
     }
 
     public function save(){
-        echo "save sayfasına hoş geldiniz ";
+        $this->load->library("form_validation");
+
+        // kurallar yazılır
+        $this->form_validation->set_rules("title","Başlık","required|trim");
+
+        $this->form_validation->set_message(
+            array(
+                "required" => "<strong>{field}</strong> alanı boş bırakılamaz"
+            )
+        );
+
+        // form_validation çalıştırılır
+        $validate = $this->form_validation->run();
+
+        if($validate){
+            // başarılı ise
+            //kayıt işlemi başlar
+
+            echo "Kayıt işlemleri başalar";
+        }else{
+            // başarısız ise
+            // Hata ekranına yönlendirilir
+            echo validation_errors();
+        }
+
+
+
+
+
+
+
     }
 
 }
