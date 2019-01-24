@@ -30,7 +30,6 @@ class Product extends CI_Controller{
     }
 
     public function new_form(){
-
         $viewData = new stdClass();
 
         /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
@@ -58,7 +57,22 @@ class Product extends CI_Controller{
         $validate = $this->form_validation->run();
 
         if($validate){
-            echo "Kayıt işlemleri başalar";
+            $insert = $this->product_model->add(
+                array(
+                    "title"       => $this->input->post("title"),
+                    "description" => $this->input->post("description"),
+                    "url"         => convertToSEO($this->input->post("title")),
+                    "rank"        => 0,
+                    "isActive"    => 1,
+                    "createdAt"   => date("Y-m-d H:i:s ")
+                )
+            );
+
+            if($insert){
+                echo "kayıt işlemi başarılıdır ";
+            }else{
+                echo "kayıt işlemi başarısızdır ";
+            }
         }else{
             $viewData = new stdClass();
 
@@ -69,13 +83,6 @@ class Product extends CI_Controller{
 
             $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
         }
-
-
-
-
-
-
-
     }
 
 }

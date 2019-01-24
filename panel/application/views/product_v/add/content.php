@@ -11,7 +11,7 @@
                 <form action="<?= base_url("product/save"); ?>" method="post">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Başlık</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Başlık" name="title">
+                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Başlık" name="title">
                         <?php if (isset($form_error)){ ?>
                             <small class="input-form-error pull-right"><?= form_error("title"); ?></small>
                         <?php } ?>
