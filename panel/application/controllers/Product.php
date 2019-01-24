@@ -22,11 +22,26 @@ class Product extends CI_Controller{
         $items = $this->product_model->get_all();
 
         /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
-        $viewData->viewFolder = $this->viewFolder;
+        $viewData->viewFolder    = $this->viewFolder;
         $viewData->subViewFolder = "list";
-        $viewData->items = $items;
+        $viewData->items         = $items;
 
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+    }
+
+    public function new_form(){
+
+        $viewData = new stdClass();
+
+        /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+        $viewData->viewFolder    = $this->viewFolder;
+        $viewData->subViewFolder = "add";
+
+        $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+    }
+
+    public function save(){
+        echo "save sayfasına hoş geldiniz ";
     }
 
 }

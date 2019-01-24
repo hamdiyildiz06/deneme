@@ -3,7 +3,7 @@
     <div class="col-md-12">
         <h4 class="m-b-lg">
             Ürün listesi
-            <a href="#" class="btn pull-right btn-outline btn-primary btn-xs"><i class="fa fa-plus"></i> Yeni Ekle</a>
+            <a href="<?= base_url("product/new_form"); ?>" class="btn pull-right btn-outline btn-primary btn-xs"><i class="fa fa-plus"></i> Yeni Ekle</a>
         </h4>
     </div><!-- END column -->
     <div class="col-md-12">
@@ -11,7 +11,7 @@
             <?php if (empty($items)){ ?>
                 <div class="alert alert-info text-center ">
                     <h5 class="alert-title">Kayıt Bulunamadı</h5>
-                    <p>Burada herhangi bir veri bulunamamaktadır. Eklemek için lütfen <a href="#">Tıklayınız</a></p>
+                    <p>Burada herhangi bir veri bulunamamaktadır. Eklemek için lütfen <a href="<?= base_url("product/new_form"); ?>">Tıklayınız</a></p>
                 </div>
             <?php }else{ ?>
                 <table class="table table-hover table-striped">
