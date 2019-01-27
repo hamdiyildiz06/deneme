@@ -20,10 +20,10 @@
                             <th><i class="fa fa-reorder"></i></th>
                             <th>#id</th>
                             <th>Başlık</th>
-                            <th>url</th>
+                            <th>Url</th>
                             <th>Açıklama</th>
                             <th>Durumu</th>
-                            <th>işlem</th>
+                            <th class="text-center">İşlemler</th>
                         </tr>
                     </thead>
                     <tbody class="sortable" data-url="<?= base_url("product/rankSetter"); ?>">
@@ -48,9 +48,10 @@
                             <button
                                     data-url="<?= base_url("product/delete/{$item->id}"); ?>"
                                     class="btn btn-sm btn-danger btn-outline remove-btn">
-                                    <i class="fa fa-trash"></i> Sil
+                                    <i class="fa fa-trash-o"></i> Sil
                             </button>
                             <a href="<?= base_url("product/update_form/{$item->id}"); ?>" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
+                            <a href="<?= base_url("product/image_form/{$item->id}"); ?>" class="btn btn-sm btn-dark btn-outline"><i class="fa fa-file-image-o"></i> Resimler</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
