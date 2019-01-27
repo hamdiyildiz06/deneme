@@ -15,8 +15,8 @@ class Product_model extends CI_Model{
     }
 
     /** Tüm kayıtları view'e getirecek olan metot.. */
-    public function get_all($where = array()){
-        return $this->db->where($where)->get($this->tableName)->result();
+    public function get_all($where = array(), $order = "id ASC"){
+        return $this->db->where($where)->order_by($order)->get($this->tableName)->result();
     }
 
     /** Tüm verileri veritabanına kayıy edecek olan metot.. */

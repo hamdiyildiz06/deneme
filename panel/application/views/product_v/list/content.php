@@ -17,21 +17,23 @@
                 <table class="table table-hover table-striped">
                     <thead>
                         <tr>
+                            <th><i class="fa fa-reorder"></i></th>
                             <th>#id</th>
-                            <th>url</th>
                             <th>Başlık</th>
+                            <th>url</th>
                             <th>Açıklama</th>
                             <th>Durumu</th>
                             <th>işlem</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="sortable" data-url="<?= base_url("product/rankSetter"); ?>">
                 <?php foreach ($items as $item): ?>
-                    <tr>
-                        <td><?= $item->id; ?></td>
+                    <tr id="ord-<?=  $item->id; ?>">
+                        <td><i class="fa fa-reorder"></i></td>
+                        <th><?= $item->id; ?></th>
+                        <td><span style="max-width: 300px; max-height: 25px; display: block; overflow: hidden;"><?= $item->title; ?></span></td>
                         <td><?= $item->url; ?></td>
-                        <td><?= $item->title; ?></td>
-                        <td><?= $item->description; ?></td>
+                        <td><span style="max-width: 300px; max-height: 25px; display: block; overflow: hidden;"><?= $item->description; ?></span></td>
                         <td>
                             <input
                                     data-url="<?= base_url("product/isActiveSetter/{$item->id}"); ?>"
