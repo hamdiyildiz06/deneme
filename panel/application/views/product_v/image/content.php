@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="widget">
             <div class="widget-body">
-                <form action="<?= base_url("product/image_update"); ?>" class="dropzone" data-plugin="dropzone" data-options="{ url: '<?= base_url("product/image_update"); ?>'}">
+                <form action="<?= base_url("product/image_update/{$item->id}"); ?>" class="dropzone" data-plugin="dropzone" data-options="{ url: '<?= base_url("product/image_update//{$item->id}"); ?>'}">
                     <div class="dz-message">
                         <h3 class="m-h-lg">Drop files here or click to upload.</h3>
                         <p class="m-b-lg text-muted">(This is just a demo dropzone. Selected files are not actually uploaded.)</p>

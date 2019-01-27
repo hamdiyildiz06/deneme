@@ -11,6 +11,7 @@ class Product extends CI_Controller{
 
         $this->viewFolder = "product_v";
         $this->load->model("product_model");
+        $this->load->model("product_image_model");
     }
 
     public function index(){
@@ -208,15 +209,10 @@ class Product extends CI_Controller{
                 )
             );
         }
-
-
-
-
     }
 
     public function image_form($id){
         $viewData = new stdClass();
-
 
         /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
         $viewData->viewFolder    = $this->viewFolder;
@@ -228,11 +224,11 @@ class Product extends CI_Controller{
             )
         );
 
-
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
     }
 
-    public function image_update(){
+    public function image_update($id){
+
         $config["allowed_types"] = "jpg|jpeg|png";
         $config["upload_path"]   = "uploads/{$this->viewFolder}/";
 
@@ -241,7 +237,22 @@ class Product extends CI_Controller{
         $upload = $this->upload->do_upload("file");
 
         if($upload){
-            echo "başarılı";
+
+            $uploaded_file = $this->upload->data("file_name");
+
+            $this->product_image_model->add(
+                array(
+                    "product_id" => $id,
+                    "img_url" => $uploaded_file,
+                    "rank" => 0,
+                    "isActive" => 1,
+                    "createdAt" => date("Y-m-d H:i:s")
+                )
+            );
+
+
+
+
         }else{
             echo "üzgünün lütfen tekrar dene";
         }
