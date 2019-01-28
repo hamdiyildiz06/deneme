@@ -85,6 +85,7 @@
             "<?= base_url("assets"); ?>/libs/bower/lightbox2/dist/css/lightbox.min.css",
             "<?= base_url("assets"); ?>/libs/bower/lightbox2/dist/js/lightbox.min.js",
             "<?= base_url("assets"); ?>/libs/bower/lightbox2/dist/js/lightbox.min.js",
+            "<?= base_url("assets"); ?>/assets/js/iziToast.min.js",
             "<?= base_url("assets"); ?>/assets/js/custom.js"
 
         ]
