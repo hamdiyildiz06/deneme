@@ -7,19 +7,21 @@
     <table class="table table-bordered table-striped table-hover pictures_list">
         <thead>
         <tr>
-            <th>#id</th>
-            <th>Görsel</th>
+            <th class="text-center"><i class="fa fa-reorder"></i></th>
+            <th class="text-center">#id</th>
+            <th class="text-center">Görsel</th>
             <th>Resim Adı</th>
-            <th>Durumu</th>
-            <th>Kapak</th>
-            <th>İşlem</th>
+            <th class="text-center">Durumu</th>
+            <th class="text-center">Kapak</th>
+            <th class="text-center">İşlem</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="sortable" data-url="<?= base_url("product/imageRankSetter"); ?>">
         <?php foreach ($item_images as $image): ?>
 
-            <tr>
-                <th class="w100 text-center"><?= $image->id; ?></th>
+            <tr id="ord-<?= $image->id; ?>">
+                <th class="text-center"><i class="fa fa-reorder"></i></th>
+                <th class="text-center"><?= $image->id; ?></th>
                 <td class="w100 text-center">
                     <img width="30" src="<?php echo base_url("uploads/{$viewFolder}/{$image->img_url}"); ?>" alt="" class="img-responsive">
                 </td>
@@ -46,7 +48,7 @@
                 </td>
                 <td class="w100 text-center">
                     <button
-                        data-url="<?= base_url("product/delete/{$image->id}"); ?>"
+                        data-url="<?= base_url("product/imageDelete/{$image->id}/{$image->product_id}"); ?>"
                         class="btn btn-sm btn-danger btn-outline remove-btn btn-block">
                         <i class="fa fa-trash-o"></i> Sil
                     </button>

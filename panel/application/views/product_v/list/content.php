@@ -14,7 +14,7 @@
                     <p>Burada herhangi bir veri bulunamamaktadır. Eklemek için lütfen <a href="<?= base_url("product/new_form"); ?>">Tıklayınız</a></p>
                 </div>
             <?php }else{ ?>
-                <table class="table table-hover table-striped content-container">
+                <table class="table table-hover table-bordered table-striped content-container">
                     <thead>
                         <tr>
                             <th><i class="fa fa-reorder"></i></th>
@@ -28,9 +28,9 @@
                     </thead>
                     <tbody class="sortable" data-url="<?= base_url("product/rankSetter"); ?>">
                 <?php foreach ($items as $item): ?>
-                    <tr id="ord-<?=  $item->id; ?>">
-                        <td><i class="fa fa-reorder"></i></td>
-                        <th><?= $item->id; ?></th>
+                    <tr id="ord-<?= $item->id; ?>">
+                        <th class="text-center"><i class="fa fa-reorder"></i></th>
+                        <th class="text-center"><?= $item->id; ?></th>
                         <td><span style="max-width: 300px; max-height: 25px; display: block; overflow: hidden;"><?= $item->title; ?></span></td>
                         <td><?= $item->url; ?></td>
                         <td><span style="max-width: 300px; max-height: 25px; display: block; overflow: hidden;"><?= $item->description; ?></span></td>
@@ -44,7 +44,7 @@
                                     <?= ($item->isActive) ? "checked" : "";  ?>
                             />
                         </td>
-                        <td>
+                        <td class="text-center">
                             <button
                                     data-url="<?= base_url("product/delete/{$item->id}"); ?>"
                                     class="btn btn-sm btn-danger btn-outline remove-btn">

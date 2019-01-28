@@ -179,6 +179,29 @@ class Product extends CI_Controller{
         }
     }
 
+    public function imageDelete($id, $parent_id){
+        $fileName =  $this->product_image_model->get(
+            array(
+                "id" => $id
+            )
+        );
+
+        $delete = $this->product_image_model->delete(
+            array(
+                "id" => $id
+            )
+        );
+
+        if ($delete) {
+            //TODO alert sistemi eklenecek
+
+            unlink("uploads/{$this->viewFolder}/{$fileName->img_url}");
+            redirect(base_url("product/image_form/{$parent_id}"));
+        }else{
+            redirect(base_url("product/image_form/{$parent_id}"));
+        }
+    }
+
     public function isActiveSetter($id){
         if ($id){
             $isActive = ($this->input->post("data") === "true") ? 1 : 0;
@@ -244,7 +267,7 @@ class Product extends CI_Controller{
             $viewData->item_images = $this->product_image_model->get_all(
                 array(
                     "product_id" => $parend_id
-                )
+                ),"rank ASC"
             );
 
             $render_html = $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/render_elements/image_list_v", $viewData, true);
@@ -262,7 +285,28 @@ class Product extends CI_Controller{
         foreach ($items as $rank => $id ){
             $update = $this->product_model->update(
                 array(
-                    "id" => $id
+                    "id"      => $id,
+                    "rank !=" =>  $rank
+                ),
+                array(
+                    "rank" => $rank
+                )
+            );
+        }
+    }
+
+    public function imageRankSetter(){
+        $data = $this->input->post("data");
+        parse_str($data, $order);
+        $items = $order['ord'];
+
+
+
+        foreach ($items as $rank => $id ){
+            $update = $this->product_image_model->update(
+                array(
+                    "id"      => $id,
+                    "rank !=" => $rank
                 ),
                 array(
                     "rank" => $rank
@@ -287,7 +331,7 @@ class Product extends CI_Controller{
         $viewData->item_images = $this->product_image_model->get_all(
             array(
                 "product_id" => $id
-            )
+            ),"rank ASC"
         );
 
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
@@ -305,7 +349,6 @@ class Product extends CI_Controller{
         $upload = $this->upload->do_upload("file");
 
         if($upload){
-
             $uploaded_file = $this->upload->data("file_name");
 
             $this->product_image_model->add(
@@ -317,9 +360,6 @@ class Product extends CI_Controller{
                     "createdAt" => date("Y-m-d H:i:s")
                 )
             );
-
-
-
 
         }else{
             echo "üzgünün lütfen tekrar dene";
@@ -336,7 +376,7 @@ class Product extends CI_Controller{
         $viewData->item_images = $this->product_image_model->get_all(
             array(
                 "product_id" => $id
-            )
+            ),"rank ASC"
         );
 
         $render_html = $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/render_elements/image_list_v", $viewData, true);
