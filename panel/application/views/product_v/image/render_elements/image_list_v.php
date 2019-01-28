@@ -11,6 +11,7 @@
             <th>Görsel</th>
             <th>Resim Adı</th>
             <th>Durumu</th>
+            <th>Kapak</th>
             <th>İşlem</th>
         </tr>
         </thead>
@@ -25,17 +26,27 @@
                 <td><?= $image->img_url; ?></td>
                 <td class="w100 text-center">
                     <input
-                        data-url="<?= base_url("product/isActiveSetter/$image->id"); ?>"
+                        data-url="<?= base_url("product/isActiveSetter/{$image->id}"); ?>"
                         class="isActive"
                         type="checkbox"
                         data-switchery
                         data-color="#10c469"
-                        <?= ($image->id) ? "checked" : "";  ?>
+                        <?= ($image->isActive) ? "checked" : "";  ?>
+                    />
+                </td>
+                <td class="w100 text-center">
+                    <input
+                        data-url="<?= base_url("product/isCoverSetter/{$image->id}/{$image->product_id}"); ?>"
+                        class="isCover"
+                        type="checkbox"
+                        data-switchery
+                        data-color="#ff5b5b"
+                        <?= ($image->isCover) ? "checked" : "";  ?>
                     />
                 </td>
                 <td class="w100 text-center">
                     <button
-                        data-url="<?= base_url("product/delete/$image->id"); ?>"
+                        data-url="<?= base_url("product/delete/{$image->id}"); ?>"
                         class="btn btn-sm btn-danger btn-outline remove-btn btn-block">
                         <i class="fa fa-trash-o"></i> Sil
                     </button>
