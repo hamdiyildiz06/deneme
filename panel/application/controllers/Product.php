@@ -71,12 +71,28 @@ class Product extends CI_Controller{
                 )
             );
 
+            //TODO alert sistemi eklenecek
             if($insert){
-                //TODO alert sistemi eklenecek
-                redirect(base_url("product"));
+
+                $alert = [
+                    "title"    => "İşlem Başarılı",
+                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                    "type"     => "success"
+                ];
+
             }else{
-                redirect(base_url("product"));
+
+                $alert = [
+                    "title"    => "Bir Hata Oluştu!!!",
+                    "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                    "type"     => "error"
+                ];
+
             }
+
+            $this->session->set_flashdata("alert", $alert);
+            redirect(base_url("product"));
+
         }else{
             $viewData = new stdClass();
 
@@ -138,10 +154,23 @@ class Product extends CI_Controller{
 
             if($update){
                 //TODO alert sistemi eklenecek
-                redirect(base_url("product"));
+                $alert = [
+                    "title"    => "İşlem Başarılı",
+                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                    "type"     => "success"
+                ];
             }else{
-                redirect(base_url("product"));
+
+                $alert = [
+                    "title"    => "Bir Hata Oluştu!!!",
+                    "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                    "type"     => "error"
+                ];
+
             }
+
+            $this->session->set_flashdata("alert", $alert);
+            redirect(base_url("product"));
         }else{
             $viewData = new stdClass();
 
@@ -171,12 +200,25 @@ class Product extends CI_Controller{
             )
         );
 
-        if ($delete) {
+        if($delete){
             //TODO alert sistemi eklenecek
-            redirect(base_url("product"));
+            $alert = [
+                "title"    => "İşlem Başarılı",
+                "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                "type"     => "success"
+            ];
         }else{
-            redirect(base_url("product"));
+
+            $alert = [
+                "title"    => "Bir Hata Oluştu!!!",
+                "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                "type"     => "error"
+            ];
+
         }
+
+        $this->session->set_flashdata("alert", $alert);
+        redirect(base_url("product"));
     }
 
     public function imageDelete($id, $parent_id){
@@ -192,14 +234,26 @@ class Product extends CI_Controller{
             )
         );
 
-        if ($delete) {
+        if($delete){
             //TODO alert sistemi eklenecek
-
+            $alert = [
+                "title"    => "İşlem Başarılı",
+                "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                "type"     => "success"
+            ];
             unlink("uploads/{$this->viewFolder}/{$fileName->img_url}");
-            redirect(base_url("product/image_form/{$parent_id}"));
         }else{
-            redirect(base_url("product/image_form/{$parent_id}"));
+
+            $alert = [
+                "title"    => "Bir Hata Oluştu!!!",
+                "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                "type"     => "error"
+            ];
+
         }
+
+        $this->session->set_flashdata("alert", $alert);
+        redirect(base_url("product/image_form/{$parent_id}"));
     }
 
     public function isActiveSetter($id){
@@ -271,7 +325,6 @@ class Product extends CI_Controller{
             );
 
             $render_html = $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/render_elements/image_list_v", $viewData, true);
-
             echo $render_html;
 
         }
@@ -299,8 +352,6 @@ class Product extends CI_Controller{
         $data = $this->input->post("data");
         parse_str($data, $order);
         $items = $order['ord'];
-
-
 
         foreach ($items as $rank => $id ){
             $update = $this->product_image_model->update(
@@ -343,7 +394,6 @@ class Product extends CI_Controller{
         $config["upload_path"]   = "uploads/{$this->viewFolder}/";
         $config["file_name"]     = $file_name;
 
-
         $this->load->library("upload", $config);
 
         $upload = $this->upload->do_upload("file");
@@ -362,6 +412,11 @@ class Product extends CI_Controller{
             );
 
         }else{
+            $alert = [
+                "title"    => "Bir Hata Oluştu!!!",
+                "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                "type"     => "error"
+            ];
             echo "üzgünün lütfen tekrar dene";
         }
     }
@@ -380,11 +435,7 @@ class Product extends CI_Controller{
         );
 
         $render_html = $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/render_elements/image_list_v", $viewData, true);
-
         echo $render_html;
     }
-
-
-
 
 }
