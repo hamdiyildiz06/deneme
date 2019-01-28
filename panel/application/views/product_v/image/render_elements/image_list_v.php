@@ -7,8 +7,8 @@
     <table class="table table-bordered table-striped table-hover pictures_list">
         <thead>
         <tr>
-            <th class="text-center"><i class="fa fa-reorder"></i></th>
-            <th class="text-center">#id</th>
+            <th class="w50 text-center"><i class="fa fa-reorder"></i></th>
+            <th class="w50 text-center">#id</th>
             <th class="text-center">Görsel</th>
             <th>Resim Adı</th>
             <th class="text-center">Durumu</th>

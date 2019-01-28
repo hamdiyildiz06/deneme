@@ -3,3 +3,19 @@
     color: #ff5b5b;
     font-style: italic;
 }
+
+td, th {
+    vertical-align: middle !important;
+}
+
+.w50 {
+    width: 50px;
+}
+
+.w100 {
+    width: 100px;
+}
+
+.sortable {
+    cursor: move;
+}
