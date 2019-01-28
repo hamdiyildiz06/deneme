@@ -194,6 +194,21 @@ class Product extends CI_Controller{
         }
     }
 
+    public function imageIsActiveSetter($id){
+        if ($id){
+            $isActive = ($this->input->post("data") === "true") ? 1 : 0;
+
+            $this->product_image_model->update(
+                array(
+                    "id" => $id,
+                ),
+                array(
+                    "isActive" => $isActive,
+                )
+            );
+        }
+    }
+
     public function isCoverSetter($id, $parend_id){
         if ($id && $parend_id){
             $isCover = ($this->input->post("data") === "true") ? 1 : 0;
