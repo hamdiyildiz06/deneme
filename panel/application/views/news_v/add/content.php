@@ -32,7 +32,7 @@
 
                 <?php if (isset($form_error)){ ?>
 
-                    <div class="form-group image-upload_container" style="display: <?= ($news_type == "image") ? "block" : "none"; ?>">
+                    <div class="form-group image_upload_container" style="display: <?= ($news_type == "image") ? "block" : "none"; ?>">
                         <label for="exampleInputFile">Görsel Seçiniz</label>
                         <input type="file" name="img_url" id="exampleInputFile" class="form-control">
                     </div>
@@ -46,7 +46,7 @@
 
                 <?php } else { ?>
 
-                    <div class="form-group image-upload_container">
+                    <div class="form-group image_upload_container">
                         <label for="exampleInputFile">Görsel Seçiniz</label>
                         <input type="file" name="img_url" id="exampleInputFile" class="form-control">
                     </div>

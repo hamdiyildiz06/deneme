@@ -21,7 +21,7 @@
                             <th class="w50">#id</th>
                             <th>Başlık</th>
                             <th>Url</th>
-                            <th>Açıklama</th>
+<!--                            <th>Açıklama</th>-->
                             <th>Haber Türü</th>
                             <th>Görsel</th>
                             <th>Durumu</th>
@@ -35,16 +35,16 @@
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
                         <td><?= $item->url; ?></td>
-                        <td><?= $item->description; ?></td>
+<!--                        <td>--><?//= $item->description; ?><!--</td>-->
                         <td><?= $item->news_type; ?></td>
                         <td>
                                 <?php if ($item->news_type == "image"){ ?>
-                                    <img width="50" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>"
+                                    <img width="75" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>"
                                          alt=""
                                          class="img-rounded">
                                 <?php }else if ($item->news_type == "video"){ ?>
                                     <iframe
-                                            width="50"
+                                            width="75"
                                             src="<?= $item->video_url; ?>"
                                             frameborder="0"
                                             allow="accelerometer;
