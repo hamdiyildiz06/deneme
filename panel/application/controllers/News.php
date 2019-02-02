@@ -45,6 +45,27 @@ class News extends CI_Controller{
     public function save(){
         $this->load->library("form_validation");
 
+        $news_type = $this->input->post("news_type");
+
+        if ($news_type == "image"){
+
+            if ($_FILES["img_url"]["name"] == ""){
+                $alert = [
+                    "title"    => "Bir Hata Oluştu!!!",
+                    "message"  => "İşleminiz Tamamlanamadı Lütfen Bir Görsel Seçiniz ve Tekrar Deneyiniz",
+                    "type"     => "error"
+                ];
+
+                $this->session->set_flashdata("alert", $alert);
+                redirect(base_url("news/new_form"));
+            }
+
+        }else if ($news_type == "video"){
+
+            $this->form_validation->set_rules("video_url","Video URL","required|trim");
+
+        }
+
         // kurallar yazılır
         $this->form_validation->set_rules("title","Başlık","required|trim");
 
@@ -52,7 +73,7 @@ class News extends CI_Controller{
         //Hata mesajlarının Oluşturulması
         $this->form_validation->set_message(
             array(
-                "required" => "<strong>{field}</strong> alanı boş bırakılamaz"
+                "required" => "<strong>{field}</strong> Alanını Boş Bırakmayınız.."
             )
         );
 
@@ -60,6 +81,11 @@ class News extends CI_Controller{
         $validate = $this->form_validation->run();
 
         if($validate){
+
+            echo "kayıt işlemleri başlasın";
+            die();
+
+
             $insert = $this->news_model->add(
                 array(
                     "title"       => $this->input->post("title"),
@@ -100,6 +126,7 @@ class News extends CI_Controller{
             $viewData->viewFolder    = $this->viewFolder;
             $viewData->subViewFolder = "add";
             $viewData->form_error = true;
+            $viewData->news_type = $news_type;
 
             $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
         }
