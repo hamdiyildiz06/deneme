@@ -33,11 +33,30 @@
                     <tr id="ord-<?= $item->id; ?>">
                         <th class="text-center"><i class="fa fa-reorder"></i></th>
                         <th class="text-center"><?= $item->id; ?></th>
-                        <td><span style="max-width: 300px; max-height: 25px; display: block; overflow: hidden;"><?= $item->title; ?></span></td>
+                        <td><?= $item->title; ?></td>
                         <td><?= $item->url; ?></td>
-                        <td><span style="max-width: 300px; max-height: 25px; display: block; overflow: hidden;"><?= $item->description; ?></span></td>
-                        <td><span style="max-width: 300px; max-height: 25px; display: block; overflow: hidden;"><?= $item->news_type; ?></span></td>
-                        <td><span style="max-width: 300px; max-height: 25px; display: block; overflow: hidden;"><?= "Görsel Gelecek" ?></span></td>
+                        <td><?= $item->description; ?></td>
+                        <td><?= $item->news_type; ?></td>
+                        <td>
+                                <?php if ($item->news_type == "image"){ ?>
+                                    <img width="50" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>"
+                                         alt=""
+                                         class="img-rounded">
+                                <?php }else if ($item->news_type == "video"){ ?>
+                                    <iframe
+                                            width="50"
+                                            src="<?= $item->video_url; ?>"
+                                            frameborder="0"
+                                            allow="accelerometer;
+                                            autoplay;
+                                            encrypted-media;
+                                            gyroscope;
+                                            picture-in-picture"
+                                            allowfullscreen>
+
+                                    </iframe>
+                                <?php } ?>
+                        </td>
                         <td>
                             <input
                                     data-url="<?= base_url("news/isActiveSetter/{$item->id}"); ?>"
