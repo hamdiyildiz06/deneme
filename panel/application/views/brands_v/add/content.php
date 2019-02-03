@@ -2,13 +2,13 @@
 
     <div class="col-md-12">
         <h4 class="m-b-lg">
-            Yeni Referans Ekle
+            Yeni Marka Ekle
         </h4>
     </div><!-- END column -->
     <div class="col-md-12">
         <div class="widget">
             <div class="widget-body">
-                <form action="<?= base_url("references/save"); ?>" method="post" enctype="multipart/form-data">
+                <form action="<?= base_url("brands/save"); ?>" method="post" enctype="multipart/form-data">
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Başlık</label>
@@ -18,18 +18,13 @@
                         <?php } ?>
                     </div>
 
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Açıklama</label>
-                        <textarea  class="m-0" data-plugin="summernote" data-options="{height: 250}" name="description"></textarea>
-                    </div>
-
                     <div class="form-group image_upload_container">
                         <label for="exampleInputFile">Görsel Seçiniz</label>
                         <input type="file" name="img_url" id="exampleInputFile" class="form-control">
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-md btn-outline">Kaydet</button>
-                    <a href="<?= base_url("references"); ?>" class="btn btn-md btn-danger btn-outline">İptal</a>
+                    <a href="<?= base_url("brands"); ?>" class="btn btn-md btn-danger btn-outline">İptal</a>
                 </form>
             </div><!-- .widget-body -->
         </div><!-- .widget -->
