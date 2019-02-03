@@ -102,7 +102,7 @@
                 </li>
 
                 <li>
-                    <a href="javascript:void(0)">
+                    <a href="<?= base_url("courses"); ?>">
                         <i class="menu-icon fa fa-calendar"></i>
                         <span class="menu-text">Eğitimler</span>
                     </a>

@@ -81,3 +81,7 @@ function convertToSEO($str, $options = array())
     $str = trim($str, $options['delimiter']);
     return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
 }
+
+function get_readable_date($date){
+    return strftime('%e %B %Y', strtotime($date));
+}
