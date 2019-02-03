@@ -45,30 +45,21 @@ class References extends CI_Controller{
     public function save(){
         $this->load->library("form_validation");
 
-        $references_type = $this->input->post("references_type");
 
-        if ($references_type == "image"){
+        if ($_FILES["img_url"]["name"] == ""){
+            $alert = [
+                "title"    => "Bir Hata Oluştu!!!",
+                "message"  => "İşleminiz Tamamlanamadı Lütfen Bir Görsel Seçiniz ve Tekrar Deneyiniz",
+                "type"     => "error"
+            ];
 
-            if ($_FILES["img_url"]["name"] == ""){
-                $alert = [
-                    "title"    => "Bir Hata Oluştu!!!",
-                    "message"  => "İşleminiz Tamamlanamadı Lütfen Bir Görsel Seçiniz ve Tekrar Deneyiniz",
-                    "type"     => "error"
-                ];
-
-                $this->session->set_flashdata("alert", $alert);
-                redirect(base_url("references/new_form"));
-            }
-
-        }else if ($references_type == "video"){
-
-            $this->form_validation->set_rules("video_url","Video URL","required|trim");
-
+            $this->session->set_flashdata("alert", $alert);
+            redirect(base_url("references/new_form"));
+            die();
         }
 
         // kurallar yazılır
         $this->form_validation->set_rules("title","Başlık","required|trim");
-
 
         //Hata mesajlarının Oluşturulması
         $this->form_validation->set_message(
@@ -77,78 +68,55 @@ class References extends CI_Controller{
             )
         );
 
+
         // form_validation çalıştırılır
         $validate = $this->form_validation->run();
 
         if($validate){
 
-            if ($references_type == "image"){
+            $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
+            $config["allowed_types"] = "jpg|jpeg|png";
+            $config["upload_path"]   = "uploads/{$this->viewFolder}/";
+            $config["file_name"]     = $file_name;
 
-                $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-                $config["allowed_types"] = "jpg|jpeg|png";
-                $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-                $config["file_name"]     = $file_name;
+            $this->load->library("upload", $config);
 
-                $this->load->library("upload", $config);
+            $upload = $this->upload->do_upload("img_url");
 
-                $upload = $this->upload->do_upload("img_url");
+            if($upload){
+                $uploaded_file = $this->upload->data("file_name");
 
-                if($upload){
-                    $uploaded_file = $this->upload->data("file_name");
-
-                    $data =  array(
+                $insert = $this->reference_model->add(
+                    array(
                         "title"       => $this->input->post("title"),
                         "description" => $this->input->post("description"),
                         "url"         => convertToSEO($this->input->post("title")),
-                        "references_type"   => $references_type,
                         "img_url"   => $uploaded_file,
-                        "video_url"   => "#",
                         "rank"        => 0,
                         "isActive"    => 1,
                         "createdAt"   => date("Y-m-d H:i:s ")
-                    );
+                    )
+                );
+
+                //TODO alert sistemi eklenecek
+                if($insert){
+
+                    $alert = [
+                        "title"    => "İşlem Başarılı",
+                        "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                        "type"     => "success"
+                    ];
 
                 }else{
+
                     $alert = [
                         "title"    => "Bir Hata Oluştu!!!",
                         "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
                         "type"     => "error"
                     ];
 
-                    $this->session->set_flashdata("alert", $alert);
-                    redirect(base_url("references/new_form"));
-                    die();
-
                 }
 
-
-
-            }else if ($references_type == "video"){
-
-                $data =  array(
-                    "title"       => $this->input->post("title"),
-                    "description" => $this->input->post("description"),
-                    "url"         => convertToSEO($this->input->post("title")),
-                    "references_type"   => $references_type,
-                    "img_url"   => "#",
-                    "video_url"   => $this->input->post("video_url"),
-                    "rank"        => 0,
-                    "isActive"    => 1,
-                    "createdAt"   => date("Y-m-d H:i:s ")
-                );
-
-            }
-
-            $insert = $this->reference_model->add($data);
-
-            //TODO alert sistemi eklenecek
-            if($insert){
-
-                $alert = [
-                    "title"    => "İşlem Başarılı",
-                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
-                    "type"     => "success"
-                ];
 
             }else{
 
@@ -157,6 +125,10 @@ class References extends CI_Controller{
                     "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
                     "type"     => "error"
                 ];
+
+                $this->session->set_flashdata("alert", $alert);
+                redirect(base_url("references/new_form"));
+                die();
 
             }
 
@@ -170,7 +142,6 @@ class References extends CI_Controller{
             $viewData->viewFolder    = $this->viewFolder;
             $viewData->subViewFolder = "add";
             $viewData->form_error = true;
-            $viewData->references_type = $references_type;
 
             $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
         }
