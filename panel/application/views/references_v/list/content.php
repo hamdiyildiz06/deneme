@@ -33,10 +33,10 @@
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
                         <td><?= $item->url; ?></td>
-                        <td class="text-center">
+                        <td class="text-center w150">
                             <img width="75" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>" alt="" class="img-rounded">
                         </td>
-                        <td class="text-center">
+                        <td class="text-center w100">
                             <input
                                     data-url="<?= base_url("references/isActiveSetter/{$item->id}"); ?>"
                                     class="isActive"
@@ -46,7 +46,7 @@
                                     <?= ($item->isActive) ? "checked" : "";  ?>
                             />
                         </td>
-                        <td class="text-center">
+                        <td class="text-center w200">
                             <button
                                     data-url="<?= base_url("references/delete/{$item->id}"); ?>"
                                     class="btn btn-sm btn-danger btn-outline remove-btn">

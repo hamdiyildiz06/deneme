@@ -35,7 +35,7 @@
                         <td><?= $item->title; ?></td>
                         <td><?= $item->url; ?></td>
                         <td class="text-center"><?= $item->news_type; ?></td>
-                        <td class="text-center">
+                        <td class="text-center w150">
                                 <?php if ($item->news_type == "image"){ ?>
                                     <img width="75" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>"
                                          alt=""
@@ -55,7 +55,7 @@
                                     </iframe>
                                 <?php } ?>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center w100">
                             <input
                                     data-url="<?= base_url("news/isActiveSetter/{$item->id}"); ?>"
                                     class="isActive"
@@ -65,7 +65,7 @@
                                     <?= ($item->isActive) ? "checked" : "";  ?>
                             />
                         </td>
-                        <td class="text-center">
+                        <td class="text-center w200">
                             <button
                                     data-url="<?= base_url("news/delete/{$item->id}"); ?>"
                                     class="btn btn-sm btn-danger btn-outline remove-btn">
