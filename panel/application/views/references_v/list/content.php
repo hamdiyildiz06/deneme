@@ -21,8 +21,8 @@
                             <th class="w50">#id</th>
                             <th>Başlık</th>
                             <th>Url</th>
-                            <th>Görsel</th>
-                            <th>Durumu</th>
+                            <th class="text-center">Görsel</th>
+                            <th class="text-center">Durumu</th>
                             <th class="text-center">İşlemler</th>
                         </tr>
                     </thead>
@@ -33,10 +33,10 @@
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
                         <td><?= $item->url; ?></td>
-                        <td>
+                        <td class="text-center">
                             <img width="75" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>" alt="" class="img-rounded">
                         </td>
-                        <td>
+                        <td class="text-center">
                             <input
                                     data-url="<?= base_url("references/isActiveSetter/{$item->id}"); ?>"
                                     class="isActive"

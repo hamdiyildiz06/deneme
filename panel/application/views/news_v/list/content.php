@@ -21,9 +21,9 @@
                             <th class="w50">#id</th>
                             <th>Başlık</th>
                             <th>Url</th>
-                            <th>Haber Türü</th>
-                            <th>Görsel</th>
-                            <th>Durumu</th>
+                            <th class="text-center">Haber Türü</th>
+                            <th class="text-center">Görsel</th>
+                            <th class="text-center">Durumu</th>
                             <th class="text-center">İşlemler</th>
                         </tr>
                     </thead>
@@ -34,8 +34,8 @@
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
                         <td><?= $item->url; ?></td>
-                        <td><?= $item->news_type; ?></td>
-                        <td>
+                        <td class="text-center"><?= $item->news_type; ?></td>
+                        <td class="text-center">
                                 <?php if ($item->news_type == "image"){ ?>
                                     <img width="75" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>"
                                          alt=""
@@ -55,7 +55,7 @@
                                     </iframe>
                                 <?php } ?>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <input
                                     data-url="<?= base_url("news/isActiveSetter/{$item->id}"); ?>"
                                     class="isActive"
