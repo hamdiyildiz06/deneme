@@ -20,10 +20,10 @@
                             <th class="w50 text-center"><i class="fa fa-reorder"></i></th>
                             <th class="w50">#id</th>
                             <th>Galeri Adı</th>
-                            <th>Galeri Türü</th>
+                            <th class="text-center">Galeri Türü</th>
                             <th>Klasör Adı</th>
                             <th>Url</th>
-                            <th>Durumu</th>
+                            <th class="text-center w100">Durumu</th>
                             <th class="text-center">İşlemler</th>
                         </tr>
                     </thead>
@@ -33,10 +33,10 @@
                         <th class="text-center"><i class="fa fa-reorder"></i></th>
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
-                        <td><?= $item->gallery_type; ?></td>
+                        <td class="text-center"><?= $item->gallery_type; ?></td>
                         <td><?= $item->folder_name; ?></td>
                         <td><?= $item->url; ?></td>
-                        <td>
+                        <td class="text-center w100">
                             <input
                                     data-url="<?= base_url("galleries/isActiveSetter/{$item->id}"); ?>"
                                     class="isActive"
@@ -53,7 +53,22 @@
                                     <i class="fa fa-trash-o"></i> Sil
                             </button>
                             <a href="<?= base_url("galleries/update_form/{$item->id}"); ?>" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
-                            <a href="<?= base_url("galleries/image_form/{$item->id}"); ?>" class="btn btn-sm btn-dark btn-outline"><i class="fa fa-file-image-o"></i> Resimler</a>
+
+                            <?php
+
+                            if ($item->gallery_type == "image"){
+                                $buttton_icon = "fa-file-image-o";
+                                $buttton_text = "Resimler";
+                            }elseif ($item->gallery_type == "video") {
+                                $buttton_icon = "fa-play-circle-o";
+                                $buttton_text = "Videolar";
+                            }else{
+                                $buttton_icon = "fa-folder-o";
+                                $buttton_text = "Dosyalar";
+                            }
+                            ?>
+
+                            <a href="<?= base_url("galleries/image_form/{$item->id}"); ?>" class="btn btn-sm btn-dark btn-outline"><i class="fa <?= $buttton_icon; ?>"></i> <?= $buttton_text; ?></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
