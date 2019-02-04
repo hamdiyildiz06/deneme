@@ -49,8 +49,7 @@ class Galleries extends CI_Controller{
         $this->load->library("form_validation");
 
         // kurallar yazılır
-        $this->form_validation->set_rules("title","Başlık","required|trim");
-
+        $this->form_validation->set_rules("title","Galeri Adı","required|trim");
 
         //Hata mesajlarının Oluşturulması
         $this->form_validation->set_message(
@@ -63,14 +62,46 @@ class Galleries extends CI_Controller{
         $validate = $this->form_validation->run();
 
         if($validate){
+
+            $gallery_type = $this->input->post("gallery_type");
+            $path           = "uploads/{$this->viewFolder}/";
+
+            if ($gallery_type == "image"){
+
+                $folder_name = convertToSEO($this->input->post("title"));
+                $path        = $path."images/".$folder_name;
+
+            }else if ($gallery_type == "file"){
+
+                $folder_name = convertToSEO($this->input->post("title"));
+                $path        = $path."files/".$folder_name;
+
+            }
+
+            if ($gallery_type != "video"){
+                if (!mkdir($path,0755)){
+
+                    $alert = [
+                        "title"    => "Bir Hata Oluştu!!!",
+                        "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                        "type"     => "error"
+                    ];
+
+                    $this->session->set_flashdata("alert", $alert);
+                    redirect(base_url("galleries"));
+                    die();
+                }
+            }
+
             $insert = $this->gallery_model->add(
                 array(
-                    "title"       => $this->input->post("title"),
-                    "description" => $this->input->post("description"),
-                    "url"         => convertToSEO($this->input->post("title")),
-                    "rank"        => 0,
-                    "isActive"    => 1,
-                    "createdAt"   => date("Y-m-d H:i:s ")
+                    "title"        => $this->input->post("title"),
+                    "gallery_type" => $this->input->post("gallery_type"),
+                    "url"          => convertToSEO($this->input->post("title")),
+                    "folder_name"  => $folder_name,
+                    "rank"         => 0,
+                    "isActive"     => 1,
+                    "createdAt"    => date("Y-m-d H:i:s ")
                 )
             );
 
@@ -126,11 +157,11 @@ class Galleries extends CI_Controller{
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
     }
 
-    public function update($id){
+    public function update($id, $gallery_type, $oldFolderName = ""){
         $this->load->library("form_validation");
 
         // kurallar yazılır
-        $this->form_validation->set_rules("title","Başlık","required|trim");
+        $this->form_validation->set_rules("title","Galeri Adı","required|trim");
 
 
         //Hata mesajlarının Oluşturulması
@@ -144,13 +175,44 @@ class Galleries extends CI_Controller{
         $validate = $this->form_validation->run();
 
         if($validate){
+
+            $path           = "uploads/{$this->viewFolder}/";
+
+            if ($gallery_type == "image"){
+
+                $folder_name = convertToSEO($this->input->post("title"));
+                $path        = $path."images";
+
+            }else if ($gallery_type == "file"){
+
+                $folder_name = convertToSEO($this->input->post("title"));
+                $path        = $path."files";
+
+            }
+
+            if ($gallery_type != "video"){
+                if (!rename("{$path}/{$oldFolderName}","{$path}/{$folder_name}")){
+
+                    $alert = [
+                        "title"    => "Bir Hata Oluştu!!!",
+                        "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                        "type"     => "error"
+                    ];
+
+                    $this->session->set_flashdata("alert", $alert);
+                    redirect(base_url("galleries"));
+                    die();
+                }
+            }
+
+
             $update = $this->gallery_model->update(
                 array(
                     "id"          => $id
                 ),
                 array(
                     "title"       => $this->input->post("title"),
-                    "description" => $this->input->post("description"),
+                    "folder_name" => $folder_name,
                     "url"         => convertToSEO($this->input->post("title")),
                 )
             );

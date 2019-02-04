@@ -20,6 +20,7 @@
                         <label for="exampleInputPassword1">Açıklama</label>
                         <textarea  class="m-0" data-plugin="summernote" data-options="{height: 250}" name="description"></textarea>
                     </div>
+
                     <div class="form-group">
                         <label for="control-demo-6" class="">Haberin Türü</label>
                         <div id="control-demo-6" class="" >
