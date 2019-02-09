@@ -55,20 +55,19 @@
                             <a href="<?= base_url("galleries/update_form/{$item->id}"); ?>" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
 
                             <?php
-
-                            if ($item->gallery_type == "image"){
-                                $buttton_icon = "fa-file-image-o";
-                                $buttton_text = "Resimler";
-                            }elseif ($item->gallery_type == "video") {
-                                $buttton_icon = "fa-play-circle-o";
-                                $buttton_text = "Videolar";
-                            }else{
-                                $buttton_icon = "fa-folder-o";
-                                $buttton_text = "Dosyalar";
-                            }
+                                if ($item->gallery_type == "image"){
+                                    $buttton_icon = "fa-file-image-o";
+                                    $buttton_text = "Resimler";
+                                }elseif ($item->gallery_type == "video") {
+                                    $buttton_icon = "fa-play-circle-o";
+                                    $buttton_text = "Videolar";
+                                }else{
+                                    $buttton_icon = "fa-folder-o";
+                                    $buttton_text = "Dosyalar";
+                                }
                             ?>
 
-                            <a href="<?= base_url("galleries/image_form/{$item->id}"); ?>" class="btn btn-sm btn-dark btn-outline"><i class="fa <?= $buttton_icon; ?>"></i> <?= $buttton_text; ?></a>
+                            <a href="<?= base_url("galleries/upload_form/{$item->id}"); ?>" class="btn btn-sm btn-dark btn-outline"><i class="fa <?= $buttton_icon; ?>"></i> <?= $buttton_text; ?></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -4,8 +4,8 @@
             <div class="widget-body">
                 <form data-url="<?= base_url("product/refresh_image_list/{$item->id}"); ?>" action="<?= base_url("product/image_update/{$item->id}"); ?>" class="dropzone" id="dropzone" data-plugin="dropzone" data-options="{ url: '<?= base_url("product/image_update/{$item->id}"); ?>'}">
                     <div class="dz-message">
-                        <h3 class="m-h-lg">Drop files here or click to upload.</h3>
-                        <p class="m-b-lg text-muted">(This is just a demo dropzone. Selected files are not actually uploaded.)</p>
+                        <h3 class="m-h-lg">Yüklemek İstediğiniz Dosyaları Buraya Sürükleyebilirsiniz.</h3>
+                        <p class="m-b-lg text-muted">(Yüklemek için dosyalarınızı sürükleyiniz yada buraya tıklayınız...)</p>
                     </div>
                 </form>
             </div><!-- .widget-body -->

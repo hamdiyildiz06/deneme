@@ -460,32 +460,56 @@ class Galleries extends CI_Controller{
         }
     }
 
-    public function image_form($id){
+    public function upload_form($id){
         $viewData = new stdClass();
 
         /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
         $viewData->viewFolder    = $this->viewFolder;
         $viewData->subViewFolder = "image";
 
-        $viewData->item = $this->gallery_model->get(
+        $item = $this->gallery_model->get(
             array(
                 "id" => $id
             )
         );
+        $viewData->item = $item;
 
-        $viewData->item_images = $this->product_image_model->get_all(
-            array(
-                "product_id" => $id
-            ),"rank ASC"
-        );
+        if ($item->gallery_type == "image"){
+            $viewData->items = $this->image_model->get_all(
+                array(
+                    "gallery_id" => $id
+                ),
+                "rank ASC"
+            );
+        }else if ($item->gallery_type == "file"){
+            $viewData->items = $this->file_model->get_all(
+                array(
+                    "gallery_id" => $id
+                ),
+                "rank ASC"
+            );
+        }else{
+            $viewData->items = $this->video_model->get_all(
+                array(
+                    "gallery_id" => $id
+                ),
+                "rank ASC"
+            );
+        }
+
+        $viewData->gallery_type = $item->gallery_type;
 
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
     }
 
-    public function image_update($id){
+    public function file_update($gallery_id, $gallery_type, $folderName){
         $file_name = convertToSEO(pathinfo($_FILES['file']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-        $config["allowed_types"] = "jpg|jpeg|png";
-        $config["upload_path"]   = "uploads/{$this->viewFolder}/";
+
+        $config["upload_path"]   = ($gallery_type == "image") ? $config["allowed_types"] = "jpg|jpeg|png" : $config["allowed_types"] = "jpg|jpeg|png|pdf|doc|docx|txt";
+
+
+//        $config["allowed_types"] = "jpg|jpeg|png";
+        $config["upload_path"]   = ($gallery_type == "image") ? "uploads/{$this->viewFolder}/images/$folderName" : "uploads/{$this->viewFolder}/files/{$folderName}";
         $config["file_name"]     = $file_name;
 
         $this->load->library("upload", $config);
@@ -493,15 +517,16 @@ class Galleries extends CI_Controller{
         $upload = $this->upload->do_upload("file");
 
         if($upload){
-            $uploaded_file = $this->upload->data("file_name");
 
-            $this->product_image_model->add(
+            $uploaded_file = $this->upload->data("file_name");
+            $modelName = ($gallery_type == "image") ? "image_model" : "file_model";
+            $this->$modelName->add(
                 array(
-                    "product_id" => $id,
-                    "img_url" => $uploaded_file,
+                    "url" => $config["upload_path"] . "/" . $uploaded_file,
                     "rank" => 0,
                     "isActive" => 1,
-                    "createdAt" => date("Y-m-d H:i:s")
+                    "createdAt" => date("Y-m-d H:i:s"),
+                    "gallery_id" => $gallery_id
                 )
             );
 
@@ -511,20 +536,26 @@ class Galleries extends CI_Controller{
                 "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
                 "type"     => "error"
             ];
-            echo "üzgünün lütfen tekrar dene";
+            $this->session->set_flashdata("alert", $alert);
+            redirect(base_url("galleries"));
+
+            die();
         }
     }
 
-    public function refresh_image_list($id){
+    public function refresh_file_list($gallery_id, $gallery_type, $folderName){
         $viewData = new stdClass();
 
         /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
         $viewData->viewFolder    = $this->viewFolder;
         $viewData->subViewFolder = "image";
+        $viewData->gallery_type = $gallery_type;
+        $viewData->folderName = $folderName;
+        $modelName = ($gallery_type == "image") ? "image_model" : "file_model";
 
-        $viewData->item_images = $this->product_image_model->get_all(
+        $viewData->item_images = $this->$modelName->get_all(
             array(
-                "product_id" => $id
+                "gallery_id" => $gallery_id
             ),"rank ASC"
         );
 
