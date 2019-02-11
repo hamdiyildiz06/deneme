@@ -21,7 +21,7 @@
             <th class="text-center">İşlem</th>
         </tr>
         </thead>
-        <tbody class="sortable" data-url="<?= base_url("galleries/imageRankSetter"); ?>">
+        <tbody class="sortable" data-url="<?= base_url("galleries/fileRankSetter/{$gallery_type}"); ?>">
         <?php foreach ($items as $item): ?>
 
             <tr id="ord-<?= $item->id; ?>">
@@ -37,7 +37,7 @@
                 <td><?= $item->url; ?></td>
                 <td class="w100 text-center">
                     <input
-                        data-url="<?= base_url("galleries/imageIsActiveSetter/{$item->id}"); ?>"
+                        data-url="<?= base_url("galleries/fileIsActiveSetter/{$item->id}/{$gallery_type}"); ?>"
                         class="isActive"
                         type="checkbox"
                         data-switchery
@@ -47,7 +47,7 @@
                 </td>
                 <td class="w100 text-center">
                     <button
-                        data-url="<?= base_url("galleries/imageDelete/{$item->id}/{$item->gallery_id}"); ?>"
+                        data-url="<?= base_url("galleries/fileDelete/{$item->id}/{$item->gallery_id}/{$gallery_type}"); ?>"
                         class="btn btn-sm btn-danger btn-outline remove-btn btn-block">
                         <i class="fa fa-trash-o"></i> Sil
                     </button>
