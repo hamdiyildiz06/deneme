@@ -11,7 +11,7 @@
             <th class="w50 text-center">#id</th>
             <th class="text-center">
                 <?php if ($gallery_type == "image"){ ?>
-                    Göreseler
+                    Görseller
                 <?php } elseif ($gallery_type == "file") {?>
                     Dosyalar
                 <?php } ?>

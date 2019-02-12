@@ -315,42 +315,6 @@ class Galleries extends CI_Controller{
         }
     }
 
-    public function fileDelete($id, $parent_id, $gallery_type){
-        $modelName = ($gallery_type == "image") ? "image_model" : "file_model";
-        $fileName =  $this->$modelName->get(
-            array(
-                "id" => $id
-            )
-        );
-
-        $delete = $this->$modelName->delete(
-            array(
-                "id" => $id
-            )
-        );
-
-        if($delete){
-            //TODO alert sistemi eklenecek
-            $alert = [
-                "title"    => "İşlem Başarılı",
-                "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
-                "type"     => "success"
-            ];
-            unlink($fileName->url);
-        }else{
-
-            $alert = [
-                "title"    => "Bir Hata Oluştu!!!",
-                "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
-                "type"     => "error"
-            ];
-
-        }
-
-        $this->session->set_flashdata("alert", $alert);
-        redirect(base_url("galleries/upload_form/{$parent_id}"));
-    }
-
     public function isActiveSetter($id){
         if ($id){
             $isActive = ($this->input->post("data") === "true") ? 1 : 0;
@@ -361,41 +325,6 @@ class Galleries extends CI_Controller{
                 ),
                 array(
                     "isActive" => $isActive,
-                )
-            );
-        }
-    }
-
-    public function fileIsActiveSetter($id, $gallery_type){
-        if ($id && $gallery_type){
-            $isActive = ($this->input->post("data") === "true") ? 1 : 0;
-            $modelName = ($gallery_type == "image") ? "image_model" : "file_model";
-
-            $this->$modelName->update(
-                array(
-                    "id" => $id,
-                ),
-                array(
-                    "isActive" => $isActive,
-                )
-            );
-        }
-    }
-
-    public function fileRankSetter($gallery_type){
-        $data = $this->input->post("data");
-        parse_str($data, $order);
-        $items = $order['ord'];
-        $modelName = ($gallery_type == "image") ? "image_model" : "file_model";
-
-        foreach ($items as $rank => $id ){
-            $this->$modelName->update(
-                array(
-                    "id"      => $id,
-                    "rank !=" => $rank
-                ),
-                array(
-                    "rank" => $rank
                 )
             );
         }
@@ -418,6 +347,8 @@ class Galleries extends CI_Controller{
             );
         }
     }
+
+    /*********  Galeri Elemanları İçişn Kullanılan Metotlar  *********/
 
     public function upload_form($id){
         $viewData = new stdClass();
@@ -521,5 +452,198 @@ class Galleries extends CI_Controller{
         $render_html = $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/render_elements/file_list_v", $viewData, true);
         echo $render_html;
     }
+
+    public function fileDelete($id, $parent_id, $gallery_type){
+        $modelName = ($gallery_type == "image") ? "image_model" : "file_model";
+        $fileName =  $this->$modelName->get(
+            array(
+                "id" => $id
+            )
+        );
+
+        $delete = $this->$modelName->delete(
+            array(
+                "id" => $id
+            )
+        );
+
+        if($delete){
+            //TODO alert sistemi eklenecek
+            $alert = [
+                "title"    => "İşlem Başarılı",
+                "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                "type"     => "success"
+            ];
+            unlink($fileName->url);
+        }else{
+
+            $alert = [
+                "title"    => "Bir Hata Oluştu!!!",
+                "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                "type"     => "error"
+            ];
+
+        }
+
+        $this->session->set_flashdata("alert", $alert);
+        redirect(base_url("galleries/upload_form/{$parent_id}"));
+    }
+
+    public function fileIsActiveSetter($id, $gallery_type){
+        if ($id && $gallery_type){
+            $isActive = ($this->input->post("data") === "true") ? 1 : 0;
+            $modelName = ($gallery_type == "image") ? "image_model" : "file_model";
+
+            $this->$modelName->update(
+                array(
+                    "id" => $id,
+                ),
+                array(
+                    "isActive" => $isActive,
+                )
+            );
+        }
+    }
+
+    public function fileRankSetter($gallery_type){
+        $data = $this->input->post("data");
+        parse_str($data, $order);
+        $items = $order['ord'];
+        $modelName = ($gallery_type == "image") ? "image_model" : "file_model";
+
+        foreach ($items as $rank => $id ){
+            $this->$modelName->update(
+                array(
+                    "id"      => $id,
+                    "rank !=" => $rank
+                ),
+                array(
+                    "rank" => $rank
+                )
+            );
+        }
+    }
+
+    /*********  Video Galeri Elemanları İçişn Kullanılan Metotlar  *********/
+
+    public function gallery_video_list($id){
+
+        $viewData = new stdClass();
+
+        $gallery = $this->gallery_model->get(
+            array(
+                "id" => $id
+            )
+        );
+
+        /** tablodan verilerin getirilmesi */
+        $items = $this->video_model->get_all(
+            array(
+                "gallery_id" => $id
+            ),"rank ASC"
+        );
+
+        /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+        $viewData->viewFolder    = $this->viewFolder;
+        $viewData->subViewFolder = "video/list";
+        $viewData->items         = $items;
+        $viewData->gallery       = $gallery;
+
+        $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+    }
+
+    public function new_gallery_video_form($id){
+        $viewData = new stdClass();
+
+        /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+        $viewData->viewFolder    = $this->viewFolder;
+        $viewData->subViewFolder = "video/add";
+        $viewData->gallery_id    = $id;
+
+        $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+    }
+
+    public function gallery_video_save($id){
+        $this->load->library("form_validation");
+
+        // kurallar yazılır
+        $this->form_validation->set_rules("url","Video URL","required|trim");
+
+        //Hata mesajlarının Oluşturulması
+        $this->form_validation->set_message(
+            array(
+                "required" => "<strong>{field}</strong> alanı boş bırakılamaz"
+            )
+        );
+
+        // form_validation çalıştırılır
+        $validate = $this->form_validation->run();
+
+        if($validate){
+
+
+
+
+
+
+            $insert = $this->video_model->add(
+                array(
+                    "url"          => $this->input->post("url"),
+                    "gallery_id"   => $id,
+                    "rank"         => 0,
+                    "isActive"     => 1,
+                    "createdAt"    => date("Y-m-d H:i:s ")
+                )
+            );
+
+            //TODO alert sistemi eklenecek
+            if($insert){
+
+                $alert = [
+                    "title"    => "İşlem Başarılı",
+                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                    "type"     => "success"
+                ];
+
+            }else{
+
+                $alert = [
+                    "title"    => "Bir Hata Oluştu!!!",
+                    "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                    "type"     => "error"
+                ];
+
+            }
+
+            $this->session->set_flashdata("alert", $alert);
+            redirect(base_url("galleries/gallery_video_list/{$id}"));
+
+        }else{
+            $viewData = new stdClass();
+
+            /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+            $viewData->viewFolder    = $this->viewFolder;
+            $viewData->subViewFolder = "video/add";
+            $viewData->form_error = true;
+            $viewData->gallery_id = $id;
+
+
+            $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
