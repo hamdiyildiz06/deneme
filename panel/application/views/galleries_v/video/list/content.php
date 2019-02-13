@@ -25,7 +25,7 @@
                             <th class="text-center">İşlemler</th>
                         </tr>
                     </thead>
-                    <tbody class="sortable" data-url="<?= base_url("galleries/rankSetter"); ?>">
+                    <tbody class="sortable" data-url="<?= base_url("galleries/rankGalleryVideoSetter"); ?>">
                 <?php foreach ($items as $item): ?>
                     <tr id="ord-<?= $item->id; ?>">
                         <th class="text-center"><i class="fa fa-reorder"></i></th>
@@ -46,7 +46,7 @@
                         </td>
                         <td class="text-center w100">
                             <input
-                                    data-url="<?= base_url("galleries/isActiveSetter/{$item->id}"); ?>"
+                                    data-url="<?= base_url("galleries/galleryVideoIsActiveSetter/{$item->id}"); ?>"
                                     class="isActive"
                                     type="checkbox"
                                     data-switchery
@@ -56,11 +56,11 @@
                         </td>
                         <td class="text-center w200">
                             <button
-                                    data-url="<?= base_url("galleries/delete/{$item->id}"); ?>"
+                                    data-url="<?= base_url("galleries/galleryVideoDelete/{$item->id}/{$item->gallery_id}"); ?>"
                                     class="btn btn-sm btn-danger btn-outline remove-btn">
                                     <i class="fa fa-trash-o"></i> Sil
                             </button>
-                            <a href="<?= base_url("galleries/update_form/{$item->id}"); ?>" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
+                            <a href="<?= base_url("galleries/update_gallery_video_form/{$item->id}"); ?>" class="btn btn-sm btn-info btn-outline"><i class="fa fa-pencil-square-o"></i> Düzenle</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

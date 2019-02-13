@@ -632,12 +632,154 @@ class Galleries extends CI_Controller{
         }
     }
 
+    public function update_gallery_video_form($id){
+        $viewData = new stdClass();
+
+        /** Tablodan verilerin getirilmesi ..*/
+        $item  =  $this->video_model->get(
+            array(
+                "id" => $id
+            )
+        );
+
+        /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+        $viewData->viewFolder    = $this->viewFolder;
+        $viewData->subViewFolder = "video/update";
+        $viewData->item = $item;
+
+        $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+    }
+
+    public function gallery_video_update($id, $gallery_id){
+        $this->load->library("form_validation");
+
+        // kurallar yazılır
+        $this->form_validation->set_rules("url","Video URL","required|trim");
 
 
+        //Hata mesajlarının Oluşturulması
+        $this->form_validation->set_message(
+            array(
+                "required" => "<strong>{field}</strong> alanı boş bırakılamaz"
+            )
+        );
+
+        // form_validation çalıştırılır
+        $validate = $this->form_validation->run();
+
+        if($validate){
+
+            $update = $this->video_model->update(
+                array(
+                    "id"          => $id
+                ),
+                array(
+                    "url"       => $this->input->post("url")
+                )
+            );
+
+            if($update){
+                //TODO alert sistemi eklenecek
+                $alert = [
+                    "title"    => "İşlem Başarılı",
+                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                    "type"     => "success"
+                ];
+
+            }else{
+
+                $alert = [
+                    "title"    => "Bir Hata Oluştu!!!",
+                    "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                    "type"     => "error"
+                ];
+            }
+
+            $this->session->set_flashdata("alert", $alert);
+            redirect(base_url("galleries/gallery_video_list/{$gallery_id}"));
+        }else{
+            $viewData = new stdClass();
 
 
+            /** Tablodan verilerin getirilmesi ..*/
+            $item  =  $this->video_model->get(
+                array(
+                    "id" => $id
+                )
+            );
+
+            /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+            $viewData->viewFolder    = $this->viewFolder;
+            $viewData->subViewFolder = "video/update";
+            $viewData->form_error = true;
+            $viewData->item = $item;
 
 
+            $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+        }
+    }
+
+    public function rankGalleryVideoSetter(){
+        $data = $this->input->post("data");
+        parse_str($data, $order);
+        $items = $order['ord'];
+
+        foreach ($items as $rank => $id ){
+            $this->video_model->update(
+                array(
+                    "id"      => $id,
+                    "rank !=" =>  $rank
+                ),
+                array(
+                    "rank" => $rank
+                )
+            );
+        }
+    }
+
+    public function galleryVideoIsActiveSetter($id){
+        if ($id){
+            $isActive = ($this->input->post("data") === "true") ? 1 : 0;
+
+            $this->video_model->update(
+                array(
+                    "id" => $id,
+                ),
+                array(
+                    "isActive" => $isActive,
+                )
+            );
+        }
+    }
+
+    public function galleryVideoDelete($id, $gallery_id){
+
+        $delete = $this->video_model->delete(
+            array(
+                "id" => $id
+            )
+        );
+
+        if($delete){
+            //TODO alert sistemi eklenecek
+            $alert = [
+                "title"    => "İşlem Başarılı",
+                "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                "type"     => "success"
+            ];
+        }else{
+
+            $alert = [
+                "title"    => "Bir Hata Oluştu!!!",
+                "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                "type"     => "error"
+            ];
+        }
+
+        $this->session->set_flashdata("alert", $alert);
+        redirect(base_url("galleries/gallery_video_list/{$gallery_id}"));
+
+    }
 
 
 
