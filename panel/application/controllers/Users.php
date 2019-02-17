@@ -45,26 +45,22 @@ class Users extends CI_Controller{
     public function save(){
         $this->load->library("form_validation");
 
-
-        if ($_FILES["img_url"]["name"] == ""){
-            $alert = [
-                "title"    => "Bir Hata Oluştu!!!",
-                "message"  => "İşleminiz Tamamlanamadı Lütfen Bir Görsel Seçiniz ve Tekrar Deneyiniz",
-                "type"     => "error"
-            ];
-
-            $this->session->set_flashdata("alert", $alert);
-            redirect(base_url("users/new_form"));
-            die();
-        }
-
         // kurallar yazılır
-        $this->form_validation->set_rules("title","Başlık","required|trim");
+        $this->form_validation->set_rules("user_name","Kullanıcı Adı","required|trim|is_unique[users.user_name]");
+        $this->form_validation->set_rules("full_name","Ad Soyad","required|trim");
+        $this->form_validation->set_rules("email","E-Posta","required|trim|valid_email|is_unique[users.email]");
+        $this->form_validation->set_rules("password","Şifre","required|trim|min_length[4]|max_length[8]");
+        $this->form_validation->set_rules("re_password","Şifre Tekrarı","required|trim|min_length[4]|max_length[8]|matches[password]");
 
         //Hata mesajlarının Oluşturulması
         $this->form_validation->set_message(
             array(
-                "required" => "<strong>{field}</strong> Alanını Boş Bırakmayınız.."
+                "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
+                "valid_email" => "Lütfen Geçerli Bir E-Posta Adresi Giriniz",
+                "is_unique"   => "<strong>{field}</strong> Alanı Daha Önceden Kullanılmış",
+                "matches"     => "Şifre ve Şifre Tekrarı Uyuşmuyor",
+                "min_length"  => "<strong>{field}</strong> Alanına Minimum <strong> 4 </strong> Karakter Girmelisiniz",
+                "max_length"  => "<strong>{field}</strong> Alanına Maksimum <strong> 8 </strong> Karakter Girmelisiniz"
             )
         );
 
@@ -74,49 +70,25 @@ class Users extends CI_Controller{
 
         if($validate){
 
-            $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-            $config["allowed_types"] = "jpg|jpeg|png";
-            $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-            $config["file_name"]     = $file_name;
+            $insert = $this->user_model->add(
+                array(
+                    "user_name"       => $this->input->post("user_name"),
+                    "full_name"       => $this->input->post("full_name"),
+                    "email"       => $this->input->post("email"),
+                    "password"       => md5($this->input->post("password")),
+                    "isActive"    => 1,
+                    "createdAt"   => date("Y-m-d H:i:s ")
+                )
+            );
 
-            $this->load->library("upload", $config);
+            //TODO alert sistemi eklenecek
+            if($insert){
 
-            $upload = $this->upload->do_upload("img_url");
-
-            if($upload){
-                $uploaded_file = $this->upload->data("file_name");
-
-                $insert = $this->user_model->add(
-                    array(
-                        "title"       => $this->input->post("title"),
-                        "description" => $this->input->post("description"),
-                        "url"         => convertToSEO($this->input->post("title")),
-                        "img_url"   => $uploaded_file,
-                        "rank"        => 0,
-                        "isActive"    => 1,
-                        "createdAt"   => date("Y-m-d H:i:s ")
-                    )
-                );
-
-                //TODO alert sistemi eklenecek
-                if($insert){
-
-                    $alert = [
-                        "title"    => "İşlem Başarılı",
-                        "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
-                        "type"     => "success"
-                    ];
-
-                }else{
-
-                    $alert = [
-                        "title"    => "Bir Hata Oluştu!!!",
-                        "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
-                        "type"     => "error"
-                    ];
-
-                }
-
+                $alert = [
+                    "title"    => "İşlem Başarılı",
+                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                    "type"     => "success"
+                ];
 
             }else{
 
@@ -126,15 +98,11 @@ class Users extends CI_Controller{
                     "type"     => "error"
                 ];
 
-                $this->session->set_flashdata("alert", $alert);
-                redirect(base_url("users/new_form"));
-                die();
-
             }
 
             $this->session->set_flashdata("alert", $alert);
             redirect(base_url("users"));
-
+            die();
         }else{
             $viewData = new stdClass();
 
