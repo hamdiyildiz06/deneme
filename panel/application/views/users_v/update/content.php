@@ -1,42 +1,40 @@
 <div class="row">
     <div class="col-md-12">
         <h4 class="m-b-lg">
-            "<strong><?= $item->title; ?></strong>" Kaydını Düzenle
+            "<strong><?= $item->user_name; ?></strong>" Kaydını Düzenliyorsunuz...
         </h4>
     </div><!-- END column -->
     <div class="col-md-12">
         <div class="widget">
             <div class="widget-body">
-                <form action="<?= base_url("references/update/{$item->id}"); ?>" method="post" enctype="multipart/form-data">
+                <form action="<?= base_url("users/update/{$item->id}"); ?>" method="post">
 
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Başlık</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Başlık" name="title" value="<?= $item->title; ?>">
+                        <label for="exampleInputEmail1">Kullanıcı Adı</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Kullanıcı Adı" name="user_name" value="<?= isset($form_error) ? set_value("user_name") : $item->user_name; ?>">
                         <?php if (isset($form_error)){ ?>
-                            <small class="input-form-error pull-right"><?= form_error("title"); ?></small>
+                            <small class="input-form-error pull-right"><?= form_error("user_name"); ?></small>
                         <?php } ?>
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Açıklama</label>
-                        <textarea  class="m-0" data-plugin="summernote" data-options="{height: 250}" name="description"><?= $item->description; ?></textarea>
+                        <label for="exampleInputEmail1">Ad Soyad</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ad Soyad" name="full_name" value="<?= isset($form_error) ? set_value("full_name") : $item->full_name; ?>">
+                        <?php if (isset($form_error)){ ?>
+                            <small class="input-form-error pull-right"><?= form_error("full_name"); ?></small>
+                        <?php } ?>
                     </div>
 
-                    <div class="row">
-
-                        <div class="col-md-1 image_upload_container">
-                            <img src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>" alt="" class="img-responsive" >
-                        </div>
-
-                        <div class="col-md-11 form-group image_upload_container">
-                            <label for="exampleInputFile">Görsel Seçiniz</label>
-                            <input type="file" name="img_url" id="exampleInputFile" class="form-control">
-                        </div>
-
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">E-Posta Adresi</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="E-Posta Adresi" name="email" value="<?= isset($form_error) ? set_value("email") : $item->email; ?>">
+                        <?php if (isset($form_error)){ ?>
+                            <small class="input-form-error pull-right"><?= form_error("email"); ?></small>
+                        <?php } ?>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-md btn-outline">Güncelle</button>
-                    <a href="<?= base_url("references"); ?>" class="btn btn-md btn-danger btn-outline">İptal</a>
+                    <a href="<?= base_url("users"); ?>" class="btn btn-md btn-danger btn-outline">İptal</a>
                 </form>
             </div><!-- .widget-body -->
         </div><!-- .widget -->
