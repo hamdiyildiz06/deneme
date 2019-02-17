@@ -58,7 +58,7 @@ class Users extends CI_Controller{
                 "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
                 "valid_email" => "Lütfen Geçerli Bir E-Posta Adresi Giriniz",
                 "is_unique"   => "<strong>{field}</strong> Alanı Daha Önceden Kullanılmış",
-                "matches"     => "Şifre ve Şifre Tekrarı Uyuşmuyor",
+                "matches"     => "<strong>Şifre</strong> ve <strong>Şifre Tekrarı</strong> Alanları Uyuşmuyor",
                 "min_length"  => "<strong>{field}</strong> Alanına Minimum <strong> 4 </strong> Karakter Girmelisiniz",
                 "max_length"  => "<strong>{field}</strong> Alanına Maksimum <strong> 8 </strong> Karakter Girmelisiniz"
             )

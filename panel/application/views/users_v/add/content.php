@@ -12,7 +12,7 @@
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Kullanıcı Adı</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Kullanıcı Adı" name="user_name">
+                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Kullanıcı Adı" name="user_name" value="<?= isset($form_error) ? set_value("user_name") : ""; ?>">
                         <?php if (isset($form_error)){ ?>
                             <small class="input-form-error pull-right"><?= form_error("user_name"); ?></small>
                         <?php } ?>
@@ -20,7 +20,7 @@
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Ad Soyad</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ad Soyad" name="full_name">
+                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Ad Soyad" name="full_name" value="<?= isset($form_error) ? set_value("full_name") : ""; ?>">
                         <?php if (isset($form_error)){ ?>
                             <small class="input-form-error pull-right"><?= form_error("full_name"); ?></small>
                         <?php } ?>
@@ -28,7 +28,7 @@
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">E-Posta Adresi</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="E-Posta Adresi" name="email">
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="E-Posta Adresi" name="email" value="<?= isset($form_error) ? set_value("email") : ""; ?>">
                         <?php if (isset($form_error)){ ?>
                             <small class="input-form-error pull-right"><?= form_error("email"); ?></small>
                         <?php } ?>
