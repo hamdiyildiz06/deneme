@@ -133,6 +133,24 @@ class Users extends CI_Controller{
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
     }
 
+    public function update_password_form($id){
+        $viewData = new stdClass();
+
+        /** Tablodan verilerin getirilmesi ..*/
+        $item  =  $this->user_model->get(
+            array(
+                "id" => $id
+            )
+        );
+
+        /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+        $viewData->viewFolder    = $this->viewFolder;
+        $viewData->subViewFolder = "password";
+        $viewData->item = $item;
+
+        $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+    }
+
     public function update($id){
         $this->load->library("form_validation");
 
@@ -207,6 +225,77 @@ class Users extends CI_Controller{
             /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
             $viewData->viewFolder    = $this->viewFolder;
             $viewData->subViewFolder = "update";
+            $viewData->form_error = true;
+
+            $viewData->item  =  $this->user_model->get(
+                array(
+                    "id" => $id
+                )
+            );
+
+            $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+        }
+    }
+
+    public function update_password($id){
+        $this->load->library("form_validation");
+
+
+        $this->form_validation->set_rules("password","Şifre","required|trim|min_length[4]|max_length[8]");
+        $this->form_validation->set_rules("re_password","Şifre Tekrarı","required|trim|min_length[4]|max_length[8]|matches[password]");
+
+        //Hata mesajlarının Oluşturulması
+        $this->form_validation->set_message(
+            array(
+                "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
+                "matches"     => "<strong>Şifre</strong> ve <strong>Şifre Tekrarı</strong> Alanları Uyuşmuyor",
+                "min_length"  => "<strong>{field}</strong> Alanına Minimum <strong> 4 </strong> Karakter Girmelisiniz",
+                "max_length"  => "<strong>{field}</strong> Alanına Maksimum <strong> 8 </strong> Karakter Girmelisiniz"
+            )
+        );
+
+        // form_validation çalıştırılır
+        $validate = $this->form_validation->run();
+
+        if($validate){
+
+            $update = $this->user_model->update(
+                array(
+                    "id" => $id
+                ),
+                array(
+                    "password"       => md5($this->input->post("password")),
+                )
+            );
+
+            //TODO alert sistemi eklenecek
+            if($update){
+
+                $alert = [
+                    "title"    => "İşlem Başarılı",
+                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                    "type"     => "success"
+                ];
+
+            }else{
+
+                $alert = [
+                    "title"    => "Bir Hata Oluştu!!!",
+                    "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                    "type"     => "error"
+                ];
+
+            }
+
+            $this->session->set_flashdata("alert", $alert);
+            redirect(base_url("users"));
+
+        }else{
+            $viewData = new stdClass();
+
+            /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+            $viewData->viewFolder    = $this->viewFolder;
+            $viewData->subViewFolder = "Password";
             $viewData->form_error = true;
 
             $viewData->item  =  $this->user_model->get(

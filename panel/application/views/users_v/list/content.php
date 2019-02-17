@@ -42,7 +42,8 @@
                                     <?= ($item->isActive) ? "checked" : "";  ?>
                             />
                         </td>
-                        <td class="text-center w200">
+                        <td class="text-center w300">
+                            <a href="<?= base_url("users/update_password_form/{$item->id}"); ?>" class="btn btn-sm btn-dark btn-outline"><i class="fa fa-key"></i> Şifre Değiştir</a>
                             <button
                                     data-url="<?= base_url("users/delete/{$item->id}"); ?>"
                                     class="btn btn-sm btn-danger btn-outline remove-btn">
