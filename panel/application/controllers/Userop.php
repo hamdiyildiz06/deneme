@@ -72,8 +72,9 @@ class Userop extends CI_Controller{
         }else{
             $user = $this->user_model->get(
                 array(
-                    "email" => $this->input->post("user_email"),
+                    "email"    => $this->input->post("user_email"),
                     "password" => md5($this->input->post("user_password")),
+                    "isActive" => 1,
                 )
             );
 
@@ -105,6 +106,38 @@ class Userop extends CI_Controller{
     public function logout(){
         $this->session->unset_userdata("user");
         redirect(base_url("login"));
+    }
+
+    public function send_email(){
+
+        $config = array(
+            "protocol" => "smtp",
+            "smtp_host" => "ssl://smtp.gmail.com",
+            "smtp_port" => "465",
+            "smtp_user" => "denizyemek06@gmail.com",
+            "smtp_pass" => "deniz1987",
+            "starttls" => true,
+            "charset" => "utf-8",
+            "mailtype" => "html",
+            "wordwrap" => true,
+            "newline" => "\r\n",
+        );
+
+        $this->load->library("email", $config);
+
+        $this->email->from("denizyemek06@gmail.com","CMS");
+        $this->email->to("hamdiyildiz06@gmail.com");
+        $this->email->subject("CMS için Email Çalışmaları");
+        $this->email->message("Deneme e-postası...");
+
+
+        if ($this->email->send()){
+            echo "E-posta başarılı bir şekilde gönderildi";
+        }else{
+            echo $this->email->print_debugger();
+        }
+
+
     }
 
 

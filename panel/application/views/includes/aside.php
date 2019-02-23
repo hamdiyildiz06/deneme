@@ -70,6 +70,13 @@
                 </li>
 
                 <li>
+                    <a href="<?= base_url("emailsettings"); ?>">
+                        <i class="menu-icon zmdi zmdi-email zmdi-hc-lg"></i>
+                        <span class="menu-text">E-Posta Ayarları</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="<?= base_url("galleries"); ?>">
                         <i class="menu-icon zmdi zmdi-apps zmdi-hc-lg"></i>
                         <span class="menu-text">Galerileri İşlemleri</span>
