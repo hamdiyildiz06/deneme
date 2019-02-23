@@ -49,21 +49,21 @@ class Emailsettings extends CI_Controller{
         $this->load->library("form_validation");
 
         // kurallar yazılır
-        $this->form_validation->set_rules("user_name","Kullanıcı Adı","required|trim|is_unique[users.user_name]");
-        $this->form_validation->set_rules("full_name","Ad Soyad","required|trim");
-        $this->form_validation->set_rules("email","E-Posta","required|trim|valid_email|is_unique[users.email]");
-        $this->form_validation->set_rules("password","Şifre","required|trim|min_length[4]|max_length[8]");
-        $this->form_validation->set_rules("re_password","Şifre Tekrarı","required|trim|min_length[4]|max_length[8]|matches[password]");
+        $this->form_validation->set_rules("protocol","Protocol Numarası","required|trim");
+        $this->form_validation->set_rules("host","E-Posta Sunucusu","required|trim");
+        $this->form_validation->set_rules("port","Port Numarası","required|trim");
+        $this->form_validation->set_rules("user_name","Kullanıcı Adı","required|trim");
+        $this->form_validation->set_rules("user","E-Posta (User)","required|trim|valid_email");
+        $this->form_validation->set_rules("from","Kimden Gidecek (From)","required|trim|valid_email");
+        $this->form_validation->set_rules("to","Kime Gidecek (To)","required|trim|valid_email");
+        $this->form_validation->set_rules("password","Şifre","required|trim");
+
 
         //Hata mesajlarının Oluşturulması
         $this->form_validation->set_message(
             array(
                 "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
                 "valid_email" => "Lütfen Geçerli Bir E-Posta Adresi Giriniz",
-                "is_unique"   => "<strong>{field}</strong> Alanı Daha Önceden Kullanılmış",
-                "matches"     => "<strong>Şifre</strong> ve <strong>Şifre Tekrarı</strong> Alanları Uyuşmuyor",
-                "min_length"  => "<strong>{field}</strong> Alanına Minimum <strong> 4 </strong> Karakter Girmelisiniz",
-                "max_length"  => "<strong>{field}</strong> Alanına Maksimum <strong> 8 </strong> Karakter Girmelisiniz"
             )
         );
 
@@ -75,10 +75,14 @@ class Emailsettings extends CI_Controller{
 
             $insert = $this->emailsettings_model->add(
                 array(
+                    "protocol"   => $this->input->post("protocol"),
+                    "host"   => $this->input->post("host"),
+                    "port"       => $this->input->post("port"),
                     "user_name"       => $this->input->post("user_name"),
-                    "full_name"       => $this->input->post("full_name"),
-                    "email"       => $this->input->post("email"),
-                    "password"       => md5($this->input->post("password")),
+                    "user"       => $this->input->post("user"),
+                    "from"       => $this->input->post("from"),
+                    "to"       => $this->input->post("to"),
+                    "password"       => $this->input->post("password"),
                     "isActive"    => 1,
                     "createdAt"   => date("Y-m-d H:i:s ")
                 )

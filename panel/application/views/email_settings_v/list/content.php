@@ -33,7 +33,7 @@
                 <?php foreach ($items as $item): ?>
                     <tr>
                         <th class="text-center"><?= $item->id; ?></th>
-                        <td><?= $item->userName; ?></td>
+                        <td><?= $item->user_name; ?></td>
                         <td><?= $item->host; ?></td>
                         <td class="text-center"><?= $item->protocol; ?></td>
                         <td class="text-center"><?= $item->port; ?></td>
