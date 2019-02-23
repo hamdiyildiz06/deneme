@@ -85,3 +85,14 @@ function convertToSEO($str, $options = array())
 function get_readable_date($date){
     return strftime('%e %B %Y', strtotime($date));
 }
+
+function get_active_user(){
+    $t = &get_instance();
+    $user = $t->session->userdata("user");
+
+    if ($user){
+        return $user;
+    }else {
+        return false;
+    }
+}
