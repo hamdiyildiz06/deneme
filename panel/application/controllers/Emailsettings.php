@@ -75,16 +75,16 @@ class Emailsettings extends CI_Controller{
 
             $insert = $this->emailsettings_model->add(
                 array(
-                    "protocol"   => $this->input->post("protocol"),
-                    "host"   => $this->input->post("host"),
-                    "port"       => $this->input->post("port"),
-                    "user_name"       => $this->input->post("user_name"),
-                    "user"       => $this->input->post("user"),
-                    "from"       => $this->input->post("from"),
-                    "to"       => $this->input->post("to"),
-                    "password"       => $this->input->post("password"),
-                    "isActive"    => 1,
-                    "createdAt"   => date("Y-m-d H:i:s ")
+                    "protocol"  => $this->input->post("protocol"),
+                    "host"      => $this->input->post("host"),
+                    "port"      => $this->input->post("port"),
+                    "user_name" => $this->input->post("user_name"),
+                    "user"      => $this->input->post("user"),
+                    "from"      => $this->input->post("from"),
+                    "to"        => $this->input->post("to"),
+                    "password"  => $this->input->post("password"),
+                    "isActive"  => 1,
+                    "createdAt" => date("Y-m-d H:i:s ")
                 )
             );
 
@@ -161,22 +161,16 @@ class Emailsettings extends CI_Controller{
     public function update($id){
         $this->load->library("form_validation");
 
-        $oldUser = $this->emailsettings_model->get(
-            array(
-                "id" => $id
-            )
-        );
-
         // kurallar yazılır
-        if ($oldUser->user_name != $this->input->post("user_name")){
-            $this->form_validation->set_rules("user_name","Kullanıcı Adı","required|trim|is_unique[users.user_name]");
-        }
+        $this->form_validation->set_rules("protocol","Protocol Numarası","required|trim");
+        $this->form_validation->set_rules("host","E-Posta Sunucusu","required|trim");
+        $this->form_validation->set_rules("port","Port Numarası","required|trim");
+        $this->form_validation->set_rules("user_name","Kullanıcı Adı","required|trim");
+        $this->form_validation->set_rules("user","E-Posta (User)","required|trim|valid_email");
+        $this->form_validation->set_rules("from","Kimden Gidecek (From)","required|trim|valid_email");
+        $this->form_validation->set_rules("to","Kime Gidecek (To)","required|trim|valid_email");
+        $this->form_validation->set_rules("password","Şifre","required|trim");
 
-        if ($oldUser->email != $this->input->post("email")){
-            $this->form_validation->set_rules("email","E-Posta","required|trim|valid_email|is_unique[users.email]");
-        }
-
-        $this->form_validation->set_rules("full_name","Ad Soyad","required|trim");
 
 
         //Hata mesajlarının Oluşturulması
@@ -184,9 +178,9 @@ class Emailsettings extends CI_Controller{
             array(
                 "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
                 "valid_email" => "Lütfen Geçerli Bir E-Posta Adresi Giriniz",
-                "is_unique"   => "<strong>{field}</strong> Alanı Daha Önceden Kullanılmış",
             )
         );
+
 
         // form_validation çalıştırılır
         $validate = $this->form_validation->run();
@@ -198,9 +192,14 @@ class Emailsettings extends CI_Controller{
                     "id" => $id
                 ),
                 array(
-                    "user_name"       => $this->input->post("user_name"),
-                    "full_name"       => $this->input->post("full_name"),
-                    "email"       => $this->input->post("email")
+                    "protocol"  => $this->input->post("protocol"),
+                    "host"      => $this->input->post("host"),
+                    "port"      => $this->input->post("port"),
+                    "user_name" => $this->input->post("user_name"),
+                    "user"      => $this->input->post("user"),
+                    "from"      => $this->input->post("from"),
+                    "to"        => $this->input->post("to"),
+                    "password"  => $this->input->post("password"),
                 )
             );
 
@@ -232,77 +231,6 @@ class Emailsettings extends CI_Controller{
             /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
             $viewData->viewFolder    = $this->viewFolder;
             $viewData->subViewFolder = "update";
-            $viewData->form_error = true;
-
-            $viewData->item  =  $this->emailsettings_model->get(
-                array(
-                    "id" => $id
-                )
-            );
-
-            $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
-        }
-    }
-
-    public function update_password($id){
-        $this->load->library("form_validation");
-
-
-        $this->form_validation->set_rules("password","Şifre","required|trim|min_length[4]|max_length[8]");
-        $this->form_validation->set_rules("re_password","Şifre Tekrarı","required|trim|min_length[4]|max_length[8]|matches[password]");
-
-        //Hata mesajlarının Oluşturulması
-        $this->form_validation->set_message(
-            array(
-                "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
-                "matches"     => "<strong>Şifre</strong> ve <strong>Şifre Tekrarı</strong> Alanları Uyuşmuyor",
-                "min_length"  => "<strong>{field}</strong> Alanına Minimum <strong> 4 </strong> Karakter Girmelisiniz",
-                "max_length"  => "<strong>{field}</strong> Alanına Maksimum <strong> 8 </strong> Karakter Girmelisiniz"
-            )
-        );
-
-        // form_validation çalıştırılır
-        $validate = $this->form_validation->run();
-
-        if($validate){
-
-            $update = $this->emailsettings_model->update(
-                array(
-                    "id" => $id
-                ),
-                array(
-                    "password"       => md5($this->input->post("password")),
-                )
-            );
-
-            //TODO alert sistemi eklenecek
-            if($update){
-
-                $alert = [
-                    "title"    => "İşlem Başarılı",
-                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
-                    "type"     => "success"
-                ];
-
-            }else{
-
-                $alert = [
-                    "title"    => "Bir Hata Oluştu!!!",
-                    "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
-                    "type"     => "error"
-                ];
-
-            }
-
-            $this->session->set_flashdata("alert", $alert);
-            redirect(base_url("emailsettings"));
-
-        }else{
-            $viewData = new stdClass();
-
-            /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
-            $viewData->viewFolder    = $this->viewFolder;
-            $viewData->subViewFolder = "Password";
             $viewData->form_error = true;
 
             $viewData->item  =  $this->emailsettings_model->get(
@@ -353,24 +281,6 @@ class Emailsettings extends CI_Controller{
                 ),
                 array(
                     "isActive" => $isActive,
-                )
-            );
-        }
-    }
-
-    public function rankSetter(){
-        $data = $this->input->post("data");
-        parse_str($data, $order);
-        $items = $order['ord'];
-
-        foreach ($items as $rank => $id ){
-            $update = $this->emailsettings_model->update(
-                array(
-                    "id"      => $id,
-                    "rank !=" =>  $rank
-                ),
-                array(
-                    "rank" => $rank
                 )
             );
         }
