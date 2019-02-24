@@ -75,10 +75,10 @@ class Users extends CI_Controller{
 
             $insert = $this->user_model->add(
                 array(
-                    "user_name"       => $this->input->post("user_name"),
-                    "full_name"       => $this->input->post("full_name"),
+                    "user_name"   => $this->input->post("user_name"),
+                    "full_name"   => $this->input->post("full_name"),
                     "email"       => $this->input->post("email"),
-                    "password"       => md5($this->input->post("password")),
+                    "password"    => md5($this->input->post("password")),
                     "isActive"    => 1,
                     "createdAt"   => date("Y-m-d H:i:s ")
                 )

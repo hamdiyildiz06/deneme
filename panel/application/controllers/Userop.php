@@ -151,8 +151,148 @@ class Userop extends CI_Controller{
     }
 
     public function reset_password(){
-        echo "reset_password";
+        $this->load->library("form_validation");
+
+        // kurallar yazılır
+        $this->form_validation->set_rules("email","E-Posta","required|trim|valid_email");
+
+        //Hata mesajlarının Oluşturulması
+        $this->form_validation->set_message(
+            array(
+                "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
+                "valid_email" => "Lütfen Geçerli Bir <strong>{field}</strong> Adresi Giriniz",
+            )
+        );
+
+        if ($this->form_validation->run() === false){
+            $viewData = new stdClass();
+
+            /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
+            $viewData->viewFolder    = $this->viewFolder;
+            $viewData->subViewFolder = "forget_password";
+            $viewData->form_error = true;
+
+            $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
+        }else{
+            $user = $this->user_model->get(
+                array(
+                    "isActive" => 1,
+                    "email" => $this->input->post("email"),
+                )
+            );
+
+            if ($user){
+
+                $this->load->model("emailsettings_model");
+                $this->load->helper("string");
+
+
+                $temp_password = random_string();
+
+                $email_settings = $this->emailsettings_model->get(
+                    array(
+                        "isActive" => 1
+                    )
+                );
+
+
+                $config = array(
+                    "protocol" => $email_settings->protocol,
+                    "smtp_host" => $email_settings->host,
+                    "smtp_port" => $email_settings->port,
+                    "smtp_user" => $email_settings->user,
+                    "smtp_pass" => $email_settings->password,
+                    "starttls" => true,
+                    "charset" => "utf-8",
+                    "mailtype" => "html",
+                    "wordwrap" => true,
+                    "newline" => "\r\n",
+                );
+
+                $this->load->library("email", $config);
+
+                $this->email->from($email_settings->from,$email_settings->user_name);
+                $this->email->to($user->email);
+                $this->email->subject("Şifremi Unuttum..");
+                $this->email->message("CMS'e geçici olarak <strong>{$temp_password}</strong> şifresiyle giriş yapabilirsiniz..");
+
+
+                if ($this->email->send()){
+
+                    echo "E-posta başarılı bir şekilde gönderildi";
+
+                    $this->user_model->update(
+                        array(
+                            "id" => $user->id
+                        ),
+                        array(
+                            "password" => md5($temp_password),
+                        )
+                    );
+
+                    $alert = [
+                        "title"    => "İşlem Başarılı",
+                        "message"  => "Şifreniz Başarılı Bir Şekilde Güncellendi, Lütfen E-Postanızı Kontrol Ediniz...",
+                        "type"     => "success"
+                    ];
+
+                    $this->session->set_flashdata("alert", $alert);
+                    redirect(base_url("login"));
+                    die();
+
+                }else{
+//                    echo $this->email->print_debugger();
+                    $alert = [
+                        "title"    => "Bir Hata Oluştu!!!",
+                        "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                        "type"     => "error"
+                    ];
+
+                    $this->session->set_flashdata("alert",$alert);
+                    redirect(base_url("login"));
+                }
+
+
+            }else{
+
+                $alert = [
+                    "title"    => "Bir Hata Oluştu!!!",
+                    "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                    "type"     => "error"
+                ];
+
+                $this->session->set_flashdata("alert",$alert);
+                redirect(base_url("login"));
+            }
+        }
+
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

@@ -14,7 +14,16 @@
 
         <form action="<?= base_url("reset-password"); ?>" method="post">
             <div class="form-group">
-                <input id="reset-password-email" type="email" class="form-control" placeholder="E-Posta Adresiniz..." name="email">
+                <input
+                        id="reset-password-email"
+                        type="email"
+                        class="form-control"
+                        placeholder="E-Posta Adresiniz..."
+                        name="email" value="<?= isset($form_error) ? set_value("email") : ""; ?>"
+                >
+                <?php if (isset($form_error)){ ?>
+                    <small class="input-form-error pull-right"><?= form_error("email"); ?></small>
+                <?php } ?>
             </div>
             <button class="btn btn-primary">Şifremi Sıfırla</button>
         </form>
