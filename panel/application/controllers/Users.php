@@ -267,7 +267,7 @@ class Users extends CI_Controller{
                     "id" => $id
                 ),
                 array(
-                    "password"       => md5($this->input->post("password")),
+                    "password" => md5($this->input->post("password")),
                 )
             );
 
