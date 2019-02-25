@@ -55,22 +55,29 @@ class Settings extends CI_Controller{
     public function save(){
         $this->load->library("form_validation");
 
+
+        if ($_FILES["logo"]["name"] == ""){
+            $alert = [
+                "title"    => "Bir Hata Oluştu!!!",
+                "message"  => "İşleminiz Tamamlanamadı Lütfen Bir Görsel Seçiniz ve Tekrar Deneyiniz",
+                "type"     => "error"
+            ];
+
+            $this->session->set_flashdata("alert", $alert);
+            redirect(base_url("settings/new_form"));
+            die();
+        }
+
         // kurallar yazılır
-        $this->form_validation->set_rules("user_name","Kullanıcı Adı","required|trim|is_unique[users.user_name]");
-        $this->form_validation->set_rules("full_name","Ad Soyad","required|trim");
-        $this->form_validation->set_rules("email","E-Posta","required|trim|valid_email|is_unique[users.email]");
-        $this->form_validation->set_rules("password","Şifre","required|trim|min_length[4]|max_length[8]");
-        $this->form_validation->set_rules("re_password","Şifre Tekrarı","required|trim|min_length[4]|max_length[8]|matches[password]");
+        $this->form_validation->set_rules("company_name","Şirket Adı","required|trim");
+        $this->form_validation->set_rules("phone_1","Telefon 1","required|trim");
+        $this->form_validation->set_rules("email","E-Posta","required|trim|valid_email");
 
         //Hata mesajlarının Oluşturulması
         $this->form_validation->set_message(
             array(
-                "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
-                "valid_email" => "Lütfen Geçerli Bir E-Posta Adresi Giriniz",
-                "is_unique"   => "<strong>{field}</strong> Alanı Daha Önceden Kullanılmış",
-                "matches"     => "<strong>Şifre</strong> ve <strong>Şifre Tekrarı</strong> Alanları Uyuşmuyor",
-                "min_length"  => "<strong>{field}</strong> Alanına Minimum <strong> 4 </strong> Karakter Girmelisiniz",
-                "max_length"  => "<strong>{field}</strong> Alanına Maksimum <strong> 8 </strong> Karakter Girmelisiniz"
+                "required" => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
+                "valid_email" => "Lütfen Geçerli Bir <strong>{field}</strong> Adresi Giriniz.."
             )
         );
 
@@ -80,25 +87,58 @@ class Settings extends CI_Controller{
 
         if($validate){
 
-            $insert = $this->settings_model->add(
-                array(
-                    "user_name"   => $this->input->post("user_name"),
-                    "full_name"   => $this->input->post("full_name"),
-                    "email"       => $this->input->post("email"),
-                    "password"    => md5($this->input->post("password")),
-                    "isActive"    => 1,
-                    "createdAt"   => date("Y-m-d H:i:s ")
-                )
-            );
+            $file_name = convertToSEO($this->input->post("company_name")) . "." . pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION);
+            $config["allowed_types"] = "jpg|jpeg|png";
+            $config["upload_path"]   = "uploads/{$this->viewFolder}/";
+            $config["file_name"]     = $file_name;
 
-            //TODO alert sistemi eklenecek
-            if($insert){
+            $this->load->library("upload", $config);
 
-                $alert = [
-                    "title"    => "İşlem Başarılı",
-                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
-                    "type"     => "success"
-                ];
+            $upload = $this->upload->do_upload("logo");
+
+            if($upload){
+                $uploaded_file = $this->upload->data("file_name");
+
+                $insert = $this->settings_model->add(
+                    array(
+                        "company_name"  => $this->input->post("company_name"),
+                        "phone_1"       => $this->input->post("phone_1"),
+                        "phone_2"       => $this->input->post("phone_2"),
+                        "fax_1"         => $this->input->post("fax_1"),
+                        "fax_2"         => $this->input->post("fax_1"),
+                        "address"       => $this->input->post("address"),
+                        "about_us"      => $this->input->post("about_us"),
+                        "mission"       => $this->input->post("mission"),
+                        "vision"        => $this->input->post("vision"),
+                        "email"         => $this->input->post("email"),
+                        "facebook"      => $this->input->post("facebook"),
+                        "twitter"       => $this->input->post("twitter"),
+                        "instagram"     => $this->input->post("instagram"),
+                        "linkedin"      => $this->input->post("linkedin"),
+                        "logo"          => $uploaded_file,
+                        "createdAt"     => date("Y-m-d H:i:s ")
+                    )
+                );
+
+                //TODO alert sistemi eklenecek
+                if($insert){
+
+                    $alert = [
+                        "title"    => "İşlem Başarılı",
+                        "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                        "type"     => "success"
+                    ];
+
+                }else{
+
+                    $alert = [
+                        "title"    => "Bir Hata Oluştu!!!",
+                        "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                        "type"     => "error"
+                    ];
+
+                }
+
 
             }else{
 
@@ -108,11 +148,15 @@ class Settings extends CI_Controller{
                     "type"     => "error"
                 ];
 
+                $this->session->set_flashdata("alert", $alert);
+                redirect(base_url("settings/new_form"));
+                die();
+
             }
 
             $this->session->set_flashdata("alert", $alert);
             redirect(base_url("settings"));
-            die();
+
         }else{
             $viewData = new stdClass();
 
