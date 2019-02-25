@@ -281,6 +281,17 @@ class Services extends CI_Controller{
     }
 
     public function delete($id){
+
+        $eskiResimiSil = $this->service_model->get(
+            array(
+                "id" => $id
+            )
+        );
+
+
+
+
+
         $delete = $this->service_model->delete(
             array(
                 "id" => $id
@@ -294,6 +305,9 @@ class Services extends CI_Controller{
                 "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
                 "type"     => "success"
             ];
+            
+            unlink("uploads/{$this->viewFolder}/$eskiResimiSil->img_url");
+
         }else{
 
             $alert = [
