@@ -188,6 +188,16 @@ class Services extends CI_Controller{
 
             if ($_FILES["img_url"]["name"] !== ""){
 
+                $eskiResimiSil = $this->service_model->get(
+                    array(
+                        "id" => $id
+                    )
+                );
+
+                if ($eskiResimiSil){
+                    unlink("uploads/{$this->viewFolder}/$eskiResimiSil->img_url");
+                }
+
                 $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
                 $config["allowed_types"] = "jpg|jpeg|png";
                 $config["upload_path"]   = "uploads/{$this->viewFolder}/";

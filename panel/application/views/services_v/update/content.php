@@ -7,7 +7,7 @@
     <div class="col-md-12">
         <div class="widget">
             <div class="widget-body">
-                <form action="<?= base_url("references/update/{$item->id}"); ?>" method="post" enctype="multipart/form-data">
+                <form action="<?= base_url("services/update/{$item->id}"); ?>" method="post" enctype="multipart/form-data">
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Başlık</label>
@@ -36,7 +36,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-md btn-outline">Güncelle</button>
-                    <a href="<?= base_url("references"); ?>" class="btn btn-md btn-danger btn-outline">İptal</a>
+                    <a href="<?= base_url("services"); ?>" class="btn btn-md btn-danger btn-outline">İptal</a>
                 </form>
             </div><!-- .widget-body -->
         </div><!-- .widget -->
