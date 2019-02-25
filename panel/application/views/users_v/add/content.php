@@ -2,7 +2,7 @@
 
     <div class="col-md-12">
         <h4 class="m-b-lg">
-            Yeni Referans Ekle
+            Yeni Kullanıcı Ekle
         </h4>
     </div><!-- END column -->
     <div class="col-md-12">
