@@ -187,51 +187,19 @@ class Settings extends CI_Controller{
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
     }
 
-    public function update_password_form($id){
-        $viewData = new stdClass();
-
-        /** Tablodan verilerin getirilmesi ..*/
-        $item  =  $this->settings_model->get(
-            array(
-                "id" => $id
-            )
-        );
-
-        /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
-        $viewData->viewFolder    = $this->viewFolder;
-        $viewData->subViewFolder = "password";
-        $viewData->item = $item;
-
-        $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
-    }
-
     public function update($id){
         $this->load->library("form_validation");
 
-        $oldUser = $this->settings_model->get(
-            array(
-                "id" => $id
-            )
-        );
-
         // kurallar yazılır
-        if ($oldUser->user_name != $this->input->post("user_name")){
-            $this->form_validation->set_rules("user_name","Kullanıcı Adı","required|trim|is_unique[users.user_name]");
-        }
-
-        if ($oldUser->email != $this->input->post("email")){
-            $this->form_validation->set_rules("email","E-Posta","required|trim|valid_email|is_unique[users.email]");
-        }
-
-        $this->form_validation->set_rules("full_name","Ad Soyad","required|trim");
-
+        $this->form_validation->set_rules("company_name","Şirket Adı","required|trim");
+        $this->form_validation->set_rules("phone_1","Telefon 1","required|trim");
+        $this->form_validation->set_rules("email","E-Posta","required|trim|valid_email");
 
         //Hata mesajlarının Oluşturulması
         $this->form_validation->set_message(
             array(
-                "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
-                "valid_email" => "Lütfen Geçerli Bir E-Posta Adresi Giriniz",
-                "is_unique"   => "<strong>{field}</strong> Alanı Daha Önceden Kullanılmış",
+                "required" => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
+                "valid_email" => "Lütfen Geçerli Bir <strong>{field}</strong> Adresi Giriniz.."
             )
         );
 
@@ -240,16 +208,85 @@ class Settings extends CI_Controller{
 
         if($validate){
 
-            $update = $this->settings_model->update(
-                array(
-                    "id" => $id
-                ),
-                array(
-                    "user_name"       => $this->input->post("user_name"),
-                    "full_name"       => $this->input->post("full_name"),
-                    "email"       => $this->input->post("email")
-                )
-            );
+            if ($_FILES["logo"]["name"] !== ""){
+
+
+                $eskiLogoSil = $this->settings_model->get(
+                    array(
+                        "id" => $id
+                    )
+                );
+
+                if ($eskiLogoSil){
+                    unlink("uploads/{$this->viewFolder}/$eskiLogoSil->logo");
+                }
+
+
+                $file_name = convertToSEO($this->input->post("company_name")) . "." . pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION);
+                $config["allowed_types"] = "jpg|jpeg|png";
+                $config["upload_path"]   = "uploads/{$this->viewFolder}/";
+                $config["file_name"]     = $file_name;
+
+                $this->load->library("upload", $config);
+
+                $upload = $this->upload->do_upload("logo");
+
+                if($upload){
+                    $uploaded_file = $this->upload->data("file_name");
+
+                    $data = array(
+                        "company_name"  => $this->input->post("company_name"),
+                        "phone_1"       => $this->input->post("phone_1"),
+                        "phone_2"       => $this->input->post("phone_2"),
+                        "fax_1"         => $this->input->post("fax_1"),
+                        "fax_2"         => $this->input->post("fax_1"),
+                        "address"       => $this->input->post("address"),
+                        "about_us"      => $this->input->post("about_us"),
+                        "mission"       => $this->input->post("mission"),
+                        "vision"        => $this->input->post("vision"),
+                        "email"         => $this->input->post("email"),
+                        "facebook"      => $this->input->post("facebook"),
+                        "twitter"       => $this->input->post("twitter"),
+                        "instagram"     => $this->input->post("instagram"),
+                        "linkedin"      => $this->input->post("linkedin"),
+                        "logo"          => $uploaded_file,
+                        "updatedAt"     => date("Y-m-d H:i:s ")
+                    );
+
+                }else{
+                    $alert = [
+                        "title"    => "Bir Hata Oluştu!!!",
+                        "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
+                        "type"     => "error"
+                    ];
+
+                    $this->session->set_flashdata("alert", $alert);
+                    redirect(base_url("settings/update_form/{$id}"));
+                    die();
+
+                }
+
+            }else{
+                $data = array(
+                    "company_name"  => $this->input->post("company_name"),
+                    "phone_1"       => $this->input->post("phone_1"),
+                    "phone_2"       => $this->input->post("phone_2"),
+                    "fax_1"         => $this->input->post("fax_1"),
+                    "fax_2"         => $this->input->post("fax_1"),
+                    "address"       => $this->input->post("address"),
+                    "about_us"      => $this->input->post("about_us"),
+                    "mission"       => $this->input->post("mission"),
+                    "vision"        => $this->input->post("vision"),
+                    "email"         => $this->input->post("email"),
+                    "facebook"      => $this->input->post("facebook"),
+                    "twitter"       => $this->input->post("twitter"),
+                    "instagram"     => $this->input->post("instagram"),
+                    "linkedin"      => $this->input->post("linkedin"),
+                    "updatedAt"     => date("Y-m-d H:i:s ")
+                );
+            }
+
+            $update = $this->settings_model->update(array("id" => $id), $data);
 
             //TODO alert sistemi eklenecek
             if($update){
@@ -290,120 +327,5 @@ class Settings extends CI_Controller{
             $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
         }
     }
-
-    public function update_password($id){
-        $this->load->library("form_validation");
-
-
-        $this->form_validation->set_rules("password","Şifre","required|trim|min_length[4]|max_length[8]");
-        $this->form_validation->set_rules("re_password","Şifre Tekrarı","required|trim|min_length[4]|max_length[8]|matches[password]");
-
-        //Hata mesajlarının Oluşturulması
-        $this->form_validation->set_message(
-            array(
-                "required"    => "<strong>{field}</strong> Alanını Boş Bırakmayınız..",
-                "matches"     => "<strong>Şifre</strong> ve <strong>Şifre Tekrarı</strong> Alanları Uyuşmuyor",
-                "min_length"  => "<strong>{field}</strong> Alanına Minimum <strong> 4 </strong> Karakter Girmelisiniz",
-                "max_length"  => "<strong>{field}</strong> Alanına Maksimum <strong> 8 </strong> Karakter Girmelisiniz"
-            )
-        );
-
-        // form_validation çalıştırılır
-        $validate = $this->form_validation->run();
-
-        if($validate){
-
-            $update = $this->settings_model->update(
-                array(
-                    "id" => $id
-                ),
-                array(
-                    "password" => md5($this->input->post("password")),
-                )
-            );
-
-            //TODO alert sistemi eklenecek
-            if($update){
-
-                $alert = [
-                    "title"    => "İşlem Başarılı",
-                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
-                    "type"     => "success"
-                ];
-
-            }else{
-
-                $alert = [
-                    "title"    => "Bir Hata Oluştu!!!",
-                    "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
-                    "type"     => "error"
-                ];
-
-            }
-
-            $this->session->set_flashdata("alert", $alert);
-            redirect(base_url("settings"));
-
-        }else{
-            $viewData = new stdClass();
-
-            /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
-            $viewData->viewFolder    = $this->viewFolder;
-            $viewData->subViewFolder = "Password";
-            $viewData->form_error = true;
-
-            $viewData->item  =  $this->settings_model->get(
-                array(
-                    "id" => $id
-                )
-            );
-
-            $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
-        }
-    }
-
-    public function delete($id){
-        $delete = $this->settings_model->delete(
-            array(
-                "id" => $id
-            )
-        );
-
-        if($delete){
-            //TODO alert sistemi eklenecek
-            $alert = [
-                "title"    => "İşlem Başarılı",
-                "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
-                "type"     => "success"
-            ];
-        }else{
-
-            $alert = [
-                "title"    => "Bir Hata Oluştu!!!",
-                "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
-                "type"     => "error"
-            ];
-
-        }
-
-        $this->session->set_flashdata("alert", $alert);
-        redirect(base_url("settings"));
-    }
-
-    public function isActiveSetter($id){
-        if ($id){
-            $isActive = ($this->input->post("data") === "true") ? 1 : 0;
-
-            $this->settings_model->update(
-                array(
-                    "id" => $id,
-                ),
-                array(
-                    "isActive" => $isActive,
-                )
-            );
-        }
-    }
-
 
 }
