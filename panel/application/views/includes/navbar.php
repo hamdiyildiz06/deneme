@@ -1,3 +1,4 @@
+<?php $settings = get_settings(); ?>
 <nav id="app-navbar" class="navbar navbar-inverse navbar-fixed-top primary">
 
     <!-- navbar header -->
@@ -19,7 +20,7 @@
 
         <a href="<?= base_url(); ?>" class="navbar-brand">
             <span class="brand-icon"><i class="fa fa-gg"></i></span>
-            <span class="brand-name">Infinity</span>
+            <span class="brand-name"><?= $settings->company_name; ?></span>
         </a>
     </div><!-- .navbar-header -->
 

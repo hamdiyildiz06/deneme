@@ -14,7 +14,6 @@ class Userop extends CI_Controller{
 
     }
 
-
     public function login(){
 
         if (get_active_user()){
@@ -105,6 +104,7 @@ class Userop extends CI_Controller{
 
     public function logout(){
         $this->session->unset_userdata("user");
+        $this->session->unset_userdata("settings");
         redirect(base_url("login"));
     }
 

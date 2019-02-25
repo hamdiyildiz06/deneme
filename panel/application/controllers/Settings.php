@@ -307,6 +307,11 @@ class Settings extends CI_Controller{
 
             }
 
+            // Session Update İşlemi
+            $settings = $this->settings_model->get();
+            $this->session->set_userdata("settings",$settings);
+
+
             $this->session->set_flashdata("alert", $alert);
             redirect(base_url("settings"));
 

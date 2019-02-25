@@ -1,11 +1,15 @@
 <?php $user = get_active_user(); ?>
+<?php $settings = get_settings(); ?>
 
 <aside id="menubar" class="menubar light">
     <div class="app-user">
         <div class="media">
             <div class="media-left">
                 <div class="avatar avatar-md avatar-circle">
-                    <a href="<?= base_url(); ?>"><img class="img-responsive" src="<?= base_url("assets"); ?>/assets/images/221.jpg" alt="avatar"/></a>
+                    <a href="<?= base_url(); ?>">
+                        <img class="img-responsive" src="<?= base_url("assets"); ?>/assets/images/221.jpg"
+                             alt="<?= convertToSEO($settings->company_name); ?>"/>
+                    </a>
                 </div><!-- .avatar -->
             </div>
             <div class="media-body">

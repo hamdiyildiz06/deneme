@@ -136,3 +136,26 @@ function send_email($toEmail = "", $subject = "", $message = "" ){
     return $t->email->send();
 
 }
+
+function get_settings(){
+    $t = &get_instance();
+
+    $t->load->model("settings_model");
+
+    if ($t->session->userdata("settings")){
+        $settings =  $t->session->userdata("settings");
+    }else{
+        $settings = $t->settings_model->get();
+
+        if ($settings){
+            $t->session->set_userdata("settings", $settings);
+        }else{
+            $settings = new stdClass();
+            $settings->company_name = "Hamdi Yıldız";
+        }
+
+    }
+
+    return $settings;
+
+}
