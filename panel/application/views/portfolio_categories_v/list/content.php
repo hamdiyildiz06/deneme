@@ -17,17 +17,15 @@
                 <table class="table table-hover table-bordered table-striped content-container">
                     <thead>
                         <tr>
-                            <th class="w50 text-center"><i class="fa fa-reorder"></i></th>
                             <th class="w50">#id</th>
                             <th>Başlık</th>
                             <th class="text-center">Durumu</th>
                             <th class="text-center">İşlemler</th>
                         </tr>
                     </thead>
-                    <tbody class="sortable" data-url="<?= base_url("portfolio_categories/rankSetter"); ?>">
+                    <tbody>
                 <?php foreach ($items as $item): ?>
-                    <tr id="ord-<?= $item->id; ?>">
-                        <th class="text-center"><i class="fa fa-reorder"></i></th>
+                    <tr>
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
 
