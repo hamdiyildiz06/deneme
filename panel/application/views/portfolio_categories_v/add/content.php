@@ -2,13 +2,13 @@
 
     <div class="col-md-12">
         <h4 class="m-b-lg">
-            Yeni Marka Ekle
+            Yeni Portfolio Kategorisi Ekle
         </h4>
     </div><!-- END column -->
     <div class="col-md-12">
         <div class="widget">
             <div class="widget-body">
-                <form action="<?= base_url("brands/save"); ?>" method="post" enctype="multipart/form-data">
+                <form action="<?= base_url("portfolio_categories/save"); ?>" method="post">
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Başlık</label>
@@ -18,13 +18,8 @@
                         <?php } ?>
                     </div>
 
-                    <div class="form-group image_upload_container">
-                        <label for="exampleInputFile">Görsel Seçiniz</label>
-                        <input type="file" name="img_url" id="exampleInputFile" class="form-control">
-                    </div>
-
                     <button type="submit" class="btn btn-primary btn-md btn-outline">Kaydet</button>
-                    <a href="<?= base_url("brands"); ?>" class="btn btn-md btn-danger btn-outline">İptal</a>
+                    <a href="<?= base_url("portfolio_categories"); ?>" class="btn btn-md btn-danger btn-outline">İptal</a>
                 </form>
             </div><!-- .widget-body -->
         </div><!-- .widget -->

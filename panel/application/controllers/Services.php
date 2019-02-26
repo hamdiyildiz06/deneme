@@ -288,10 +288,6 @@ class Services extends CI_Controller{
             )
         );
 
-
-
-
-
         $delete = $this->service_model->delete(
             array(
                 "id" => $id

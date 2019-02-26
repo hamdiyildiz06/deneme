@@ -48,19 +48,6 @@ class Portfolio_categories extends CI_Controller{
     public function save(){
         $this->load->library("form_validation");
 
-
-        if ($_FILES["img_url"]["name"] == ""){
-            $alert = [
-                "title"    => "Bir Hata Oluştu!!!",
-                "message"  => "İşleminiz Tamamlanamadı Lütfen Bir Görsel Seçiniz ve Tekrar Deneyiniz",
-                "type"     => "error"
-            ];
-
-            $this->session->set_flashdata("alert", $alert);
-            redirect(base_url("portfolio_categories/new_form"));
-            die();
-        }
-
         // kurallar yazılır
         $this->form_validation->set_rules("title","Başlık","required|trim");
 
@@ -77,47 +64,22 @@ class Portfolio_categories extends CI_Controller{
 
         if($validate){
 
-            $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-            $config["allowed_types"] = "jpg|jpeg|png";
-            $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-            $config["file_name"]     = $file_name;
+            $insert = $this->portfolio_category_model->add(
+                array(
+                    "title"       => $this->input->post("title"),
+                    "isActive"    => 1,
+                    "createdAt"   => date("Y-m-d H:i:s ")
+                )
+            );
 
-            $this->load->library("upload", $config);
+            //TODO alert sistemi eklenecek
+            if($insert){
 
-            $upload = $this->upload->do_upload("img_url");
-
-            if($upload){
-                $uploaded_file = $this->upload->data("file_name");
-
-                $insert = $this->portfolio_category_model->add(
-                    array(
-                        "title"       => $this->input->post("title"),
-                        "img_url"     => $uploaded_file,
-                        "rank"        => 0,
-                        "isActive"    => 1,
-                        "createdAt"   => date("Y-m-d H:i:s ")
-                    )
-                );
-
-                //TODO alert sistemi eklenecek
-                if($insert){
-
-                    $alert = [
-                        "title"    => "İşlem Başarılı",
-                        "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
-                        "type"     => "success"
-                    ];
-
-                }else{
-
-                    $alert = [
-                        "title"    => "Bir Hata Oluştu!!!",
-                        "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
-                        "type"     => "error"
-                    ];
-
-                }
-
+                $alert = [
+                    "title"    => "İşlem Başarılı",
+                    "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
+                    "type"     => "success"
+                ];
 
             }else{
 
@@ -126,10 +88,6 @@ class Portfolio_categories extends CI_Controller{
                     "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
                     "type"     => "error"
                 ];
-
-                $this->session->set_flashdata("alert", $alert);
-                redirect(base_url("portfolio_categories/new_form"));
-                die();
 
             }
 
