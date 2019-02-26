@@ -142,45 +142,14 @@ class Portfolio_categories extends CI_Controller{
 
         if($validate){
 
-            if ($_FILES["img_url"]["name"] !== ""){
-
-                $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-                $config["allowed_types"] = "jpg|jpeg|png";
-                $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-                $config["file_name"]     = $file_name;
-
-                $this->load->library("upload", $config);
-
-                $upload = $this->upload->do_upload("img_url");
-
-                if($upload){
-                    $uploaded_file = $this->upload->data("file_name");
-
-                    $data =  array(
-                        "title"       => $this->input->post("title"),
-                        "img_url"   => $uploaded_file,
-                    );
-
-                }else{
-                    $alert = [
-                        "title"    => "Bir Hata Oluştu!!!",
-                        "message"  => "İşleminiz Tamamlanamadı Lütfen Tekrar Deneyiniz",
-                        "type"     => "error"
-                    ];
-
-                    $this->session->set_flashdata("alert", $alert);
-                    redirect(base_url("portfolio_categories/update_form/{$id}"));
-                    die();
-
-                }
-
-            }else{
-                $data =  array(
+            $update = $this->portfolio_category_model->update(
+                array(
+                    "id" => $id
+                ),
+                array(
                     "title"       => $this->input->post("title"),
-                );
-            }
-
-            $update = $this->portfolio_category_model->update(array("id" => $id), $data);
+                )
+            );
 
             //TODO alert sistemi eklenecek
             if($update){
