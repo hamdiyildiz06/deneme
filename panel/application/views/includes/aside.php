@@ -116,7 +116,7 @@
                     </a>
                     <ul class="submenu">
                         <li><a href="<?= base_url("portfolio_categories"); ?>"><span class="menu-text">Portfolio Kategori</span></a></li>
-                        <li><a href="<?= base_url("services"); ?>"><span class="menu-text">Portfoliolar</span></a></li>
+                        <li><a href="<?= base_url("portfolio"); ?>"><span class="menu-text">Portfoliolar</span></a></li>
                     </ul>
                 </li>
 
