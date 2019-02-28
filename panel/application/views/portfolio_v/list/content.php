@@ -21,7 +21,7 @@
                             <th class="w50">#id</th>
                             <th>Başlık</th>
                             <th>Url</th>
-                            <th>Katefori</th>
+                            <th class="text-center">Katefori</th>
                             <th>Müşteri</th>
                             <th>Bitiş Tarihi</th>
                             <th>Durumu</th>
@@ -35,7 +35,7 @@
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
                         <td><?= $item->url; ?></td>
-                        <td><?= $item->category_id; ?></td>
+                        <td class="text-center"><?=  get_category_title($item->category_id); ?></td>
                         <td><?= $item->client; ?></td>
                         <td><?= get_readable_date($item->finishedAt); ?></td>
                         <td>
