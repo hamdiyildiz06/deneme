@@ -21,7 +21,7 @@
                             <th class="w50">#id</th>
                             <th>Başlık</th>
                             <th>Url</th>
-                            <th class="text-center">Katefori</th>
+                            <th class="text-center">Kategori</th>
                             <th>Müşteri</th>
                             <th>Bitiş Tarihi</th>
                             <th>Durumu</th>
