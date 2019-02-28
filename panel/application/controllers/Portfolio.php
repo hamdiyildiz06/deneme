@@ -42,6 +42,11 @@ class Portfolio extends CI_Controller{
         /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
         $viewData->viewFolder    = $this->viewFolder;
         $viewData->subViewFolder = "add";
+        $viewData->categories = $this->portfolio_category_model->get_all(
+            array(
+                "isActive" => 1
+            )
+        );
 
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
     }
@@ -51,6 +56,9 @@ class Portfolio extends CI_Controller{
 
         // kurallar yazılır
         $this->form_validation->set_rules("title","Başlık","required|trim");
+        $this->form_validation->set_rules("category_id","Kategori","required|trim");
+        $this->form_validation->set_rules("client","Müşteri","required|trim");
+        $this->form_validation->set_rules("finishedAt","Bitiş Tarihi","required|trim");
 
 
         //Hata mesajlarının Oluşturulması
@@ -66,12 +74,17 @@ class Portfolio extends CI_Controller{
         if($validate){
             $insert = $this->portfolio_model->add(
                 array(
-                    "title"       => $this->input->post("title"),
-                    "description" => $this->input->post("description"),
-                    "url"         => convertToSEO($this->input->post("title")),
-                    "rank"        => 0,
-                    "isActive"    => 1,
-                    "createdAt"   => date("Y-m-d H:i:s ")
+                    "title"        => $this->input->post("title"),
+                    "description"  => $this->input->post("description"),
+                    "url"          => convertToSEO($this->input->post("title")),
+                    "client"       => $this->input->post("client"),
+                    "finishedAt"   => $this->input->post("finishedAt"),
+                    "category_id"  => $this->input->post("category_id"),
+                    "place"        => $this->input->post("place"),
+                    "portfolio_url" => $this->input->post("portfolio_url"),
+                    "rank"         => 0,
+                    "isActive"     => 1,
+                    "createdAt"    => date("Y-m-d H:i:s ")
                 )
             );
 
@@ -119,10 +132,17 @@ class Portfolio extends CI_Controller{
             )
         );
 
+        $categories = $this->portfolio_category_model->get_all(
+            array(
+                "isActive" => 1,
+            )
+        );
+
         /** View'e Gönderilecek değişkenlerin set edilmesi ..*/
         $viewData->viewFolder    = $this->viewFolder;
         $viewData->subViewFolder = "update";
         $viewData->item = $item;
+        $viewData->categories = $categories;
 
         $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);
     }
@@ -132,6 +152,9 @@ class Portfolio extends CI_Controller{
 
         // kurallar yazılır
         $this->form_validation->set_rules("title","Başlık","required|trim");
+        $this->form_validation->set_rules("category_id","Kategori","required|trim");
+        $this->form_validation->set_rules("client","Müşteri","required|trim");
+        $this->form_validation->set_rules("finishedAt","Bitiş Tarihi","required|trim");
 
 
         //Hata mesajlarının Oluşturulması
@@ -150,10 +173,16 @@ class Portfolio extends CI_Controller{
                     "id"          => $id
                 ),
                 array(
-                    "title"       => $this->input->post("title"),
-                    "description" => $this->input->post("description"),
-                    "url"         => convertToSEO($this->input->post("title")),
+                "title"        => $this->input->post("title"),
+                "description"  => $this->input->post("description"),
+                "url"          => convertToSEO($this->input->post("title")),
+                "client"       => $this->input->post("client"),
+                "finishedAt"   => $this->input->post("finishedAt"),
+                "category_id"  => $this->input->post("category_id"),
+                "place"        => $this->input->post("place"),
+                "portfolio_url" => $this->input->post("portfolio_url"),
                 )
+
             );
 
             if($update){
@@ -191,6 +220,11 @@ class Portfolio extends CI_Controller{
             $viewData->subViewFolder = "update";
             $viewData->form_error = true;
             $viewData->item = $item;
+            $viewData->categories = $this->portfolio_category_model->get_all(
+                array(
+                    "isActive" => 1
+                )
+            );
 
 
             $this->load->view("{$viewData->viewFolder}/{$viewData->subViewFolder}/index", $viewData);

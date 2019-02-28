@@ -303,6 +303,7 @@ class Galleries extends CI_Controller{
                     "message"  => "İşleminiz Başarılı Bir Şekilde Yapıldı",
                     "type"     => "success"
                 ];
+
             }else{
 
                 $alert = [
@@ -783,12 +784,5 @@ class Galleries extends CI_Controller{
         redirect(base_url("galleries/gallery_video_list/{$gallery_id}"));
 
     }
-
-
-
-
-
-
-
 
 }

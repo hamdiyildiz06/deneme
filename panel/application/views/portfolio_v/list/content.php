@@ -37,7 +37,7 @@
                         <td><?= $item->url; ?></td>
                         <td><?= $item->category_id; ?></td>
                         <td><?= $item->client; ?></td>
-                        <td><?= $item->finishedAt; ?></td>
+                        <td><?= get_readable_date($item->finishedAt); ?></td>
                         <td>
                             <input
                                     data-url="<?= base_url("portfolio/isActiveSetter/{$item->id}"); ?>"
