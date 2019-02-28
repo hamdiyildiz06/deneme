@@ -16,7 +16,7 @@
             <th class="text-center">İşlem</th>
         </tr>
         </thead>
-        <tbody class="sortable" data-url="<?= base_url("product/imageRankSetter"); ?>">
+        <tbody class="sortable" data-url="<?= base_url("portfolio/imageRankSetter"); ?>">
         <?php foreach ($item_images as $image): ?>
 
             <tr id="ord-<?= $image->id; ?>">
@@ -28,7 +28,7 @@
                 <td><?= $image->img_url; ?></td>
                 <td class="w100 text-center">
                     <input
-                        data-url="<?= base_url("product/imageIsActiveSetter/{$image->id}"); ?>"
+                        data-url="<?= base_url("portfolio/imageIsActiveSetter/{$image->id}"); ?>"
                         class="isActive"
                         type="checkbox"
                         data-switchery
@@ -38,7 +38,7 @@
                 </td>
                 <td class="w100 text-center">
                     <input
-                        data-url="<?= base_url("product/isCoverSetter/{$image->id}/{$image->product_id}"); ?>"
+                        data-url="<?= base_url("portfolio/isCoverSetter/{$image->id}/{$image->portfolio_id}"); ?>"
                         class="isCover"
                         type="checkbox"
                         data-switchery
@@ -48,7 +48,7 @@
                 </td>
                 <td class="w100 text-center">
                     <button
-                        data-url="<?= base_url("product/imageDelete/{$image->id}/{$image->product_id}"); ?>"
+                        data-url="<?= base_url("portfolio/imageDelete/{$image->id}/{$image->portfolio_id}"); ?>"
                         class="btn btn-sm btn-danger btn-outline remove-btn btn-block">
                         <i class="fa fa-trash-o"></i> Sil
                     </button>
