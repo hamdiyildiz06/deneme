@@ -78,35 +78,18 @@ class Services extends CI_Controller{
         if($validate){
 
             $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-            $config["allowed_types"] = "jpg|jpeg|png";
-            $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-            $config["file_name"]     = $file_name;
 
+            $image_555x343 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 555,343, $file_name);
+            $image_350x217 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 350,217, $file_name);
 
-//$_FILES["img_url"]["tmp_name"]
-//"uploads/{$this->viewFolder}/deneme.png
-//100, 200
-
-
-            $image_100x200 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 100,200, $file_name);
-
-            echo $image_100x200;
-
-            die();
-
-            $this->load->library("upload", $config);
-
-            $upload = $this->upload->do_upload("img_url");
-
-            if($upload){
-                $uploaded_file = $this->upload->data("file_name");
+            if($image_555x343 && $image_350x217){
 
                 $insert = $this->service_model->add(
                     array(
                         "title"       => $this->input->post("title"),
                         "description" => $this->input->post("description"),
                         "url"         => convertToSEO($this->input->post("title")),
-                        "img_url"   => $uploaded_file,
+                        "img_url"   => $file_name,
                         "rank"        => 0,
                         "isActive"    => 1,
                         "createdAt"   => date("Y-m-d H:i:s ")

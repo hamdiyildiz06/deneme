@@ -180,15 +180,13 @@ function get_category_title($category_id = 0){
 
 }
 
-
-//$_FILES["img_url"]["tmp_name"]
-//"uploads/{$this->viewFolder}/deneme.png
-//100, 200
-
-
 function upload_picture($file, $uploadPath, $width, $height, $name){
     $t = get_instance();
     $t->load->library("simpleimagelib");
+
+    if (!is_dir("{$uploadPath}/{$width}x{$height}")){
+        mkdir("{$uploadPath}/{$width}x{$height}");
+    }
 
     $upload_error = false;
     try {
@@ -196,7 +194,7 @@ function upload_picture($file, $uploadPath, $width, $height, $name){
         $simple_image
             ->fromFile($file)
             ->thumbnail($width, $height, "center")
-            ->toFile("{$uploadPath}/{$name}", 'image/png');
+            ->toFile("{$uploadPath}/{$width}x{$height}/{$name}", 'image/png');
 
     } catch(Exception $err) {
         $error =  $err->getMessage();
@@ -208,4 +206,20 @@ function upload_picture($file, $uploadPath, $width, $height, $name){
     }else{
         return true;
     }
+}
+
+function get_picture($path = "", $picture = "", $resolution = "50x50"){
+
+    if($picture != ""){
+        if (file_exists(FCPATH . "uploads/{$path}/{$resolution}/{$picture}")){
+            $picture = base_url("uploads/{$path}/{$resolution}/{$picture}");
+        }else{
+            $picture = base_url("assets/assets/images/default_image.png");
+        }
+    }else{
+        $picture = base_url("assets/assets/images/default_image.png");
+    }
+
+    return $picture;
+
 }
