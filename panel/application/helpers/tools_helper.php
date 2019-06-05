@@ -179,3 +179,33 @@ function get_category_title($category_id = 0){
 
 
 }
+
+
+//$_FILES["img_url"]["tmp_name"]
+//"uploads/{$this->viewFolder}/deneme.png
+//100, 200
+
+
+function upload_picture($file, $uploadPath, $width, $height, $name){
+    $t = get_instance();
+    $t->load->library("simpleimagelib");
+
+    $upload_error = false;
+    try {
+        $simple_image = $t->simpleimagelib->get_simple_image_instance();
+        $simple_image
+            ->fromFile($file)
+            ->thumbnail($width, $height, "center")
+            ->toFile("{$uploadPath}/{$name}", 'image/png');
+
+    } catch(Exception $err) {
+        $error =  $err->getMessage();
+        $upload_error = true;
+    }
+
+    if ($upload_error){
+        echo $error;
+    }else{
+        return true;
+    }
+}
