@@ -33,7 +33,7 @@
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
                         <td><?= $item->url; ?></td>
-                        <td><?= $item->description; ?></td>
+                        <td><?= strip_tags(character_limiter($item->description,100)); ?></td>
                         <td>
                             <input
                                     data-url="<?= base_url("product/isActiveSetter/{$item->id}"); ?>"
