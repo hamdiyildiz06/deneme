@@ -5,7 +5,7 @@
     <div class="row">
 
         <div class="col-md-3">
-            <img src="<?= base_url("uploads/{$viewFolder}/{$item->logo}"); ?>" alt="<?= $item->logo ?>" class="">
+            <img src="<?= get_picture($viewFolder, $item->logo, "150x35"); ?>" alt="<?= $item->logo ?>" class="">
         </div>
 
         <div class="form-group image_upload_container col-md-6">
