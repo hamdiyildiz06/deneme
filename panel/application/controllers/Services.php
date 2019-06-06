@@ -190,26 +190,21 @@ class Services extends CI_Controller{
                 );
 
                 if ($eskiResimiSil){
-                    unlink("uploads/{$this->viewFolder}/$eskiResimiSil->img_url");
+                    unlink("uploads/{$this->viewFolder}/350x217/$eskiResimiSil->img_url");
+                    unlink("uploads/{$this->viewFolder}/555x343/$eskiResimiSil->img_url");
                 }
 
                 $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-                $config["allowed_types"] = "jpg|jpeg|png";
-                $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-                $config["file_name"]     = $file_name;
+                $image_555x343 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 555,343, $file_name);
+                $image_350x217 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 350,217, $file_name);
 
-                $this->load->library("upload", $config);
-
-                $upload = $this->upload->do_upload("img_url");
-
-                if($upload){
-                    $uploaded_file = $this->upload->data("file_name");
+                if($image_555x343 && $image_350x217){
 
                     $data =  array(
                         "title"       => $this->input->post("title"),
                         "description" => $this->input->post("description"),
                         "url"         => convertToSEO($this->input->post("title")),
-                        "img_url"   => $uploaded_file,
+                        "img_url"   => $file_name,
                     );
 
                 }else{
@@ -297,7 +292,8 @@ class Services extends CI_Controller{
                 "type"     => "success"
             ];
 
-            unlink("uploads/{$this->viewFolder}/$eskiResimiSil->img_url");
+            unlink("uploads/{$this->viewFolder}/350x217/$eskiResimiSil->img_url");
+            unlink("uploads/{$this->viewFolder}/555x343/$eskiResimiSil->img_url");
 
         }else{
 

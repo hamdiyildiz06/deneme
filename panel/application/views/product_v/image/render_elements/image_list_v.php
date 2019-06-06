@@ -23,7 +23,7 @@
                 <th class="text-center"><i class="fa fa-reorder"></i></th>
                 <th class="text-center"><?= $image->id; ?></th>
                 <td class="w100 text-center">
-                    <img width="30" src="<?php echo base_url("uploads/{$viewFolder}/{$image->img_url}"); ?>" alt="" class="img-responsive">
+                    <img width="30" src="<?php echo get_picture($viewFolder, $image->img_url, "348x215"); ?>" alt="" class="img-responsive">
                 </td>
                 <td><?= $image->img_url; ?></td>
                 <td class="w100 text-center">
