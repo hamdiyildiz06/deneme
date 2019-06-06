@@ -30,7 +30,7 @@
                         </div><!-- END column -->
 
                         <div class="col-md-1 image_upload_container">
-                            <img src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>" alt="" class="img-responsive" >
+                            <img src="<?= get_picture($viewFolder, $item->img_url, "255x157"); ?>" alt="" class="img-responsive" >
                         </div>
 
                         <div class="col-md-7 form-group image_upload_container">

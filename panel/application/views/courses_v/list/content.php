@@ -34,7 +34,7 @@
                         <td><?= $item->title; ?></td>
                         <td class="w150 text-center"><?= get_readable_date($item->event_date); ?></td>
                         <td class="text-center w150">
-                            <img width="75" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>" alt="" class="img-rounded">
+                            <img width="75" src="<?= get_picture($viewFolder, $item->img_url, "255x157"); ?>" alt="" class="img-rounded">
                         </td>
                         <td class="text-center w100">
                             <input

@@ -78,23 +78,18 @@ class Courses extends CI_Controller{
         if($validate){
 
             $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-            $config["allowed_types"] = "jpg|jpeg|png";
-            $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-            $config["file_name"]     = $file_name;
 
-            $this->load->library("upload", $config);
+            $image_255x157 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 255,157, $file_name);
+            $image_1140x705 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 1140,705, $file_name);
 
-            $upload = $this->upload->do_upload("img_url");
-
-            if($upload){
-                $uploaded_file = $this->upload->data("file_name");
+            if($image_255x157 && $image_1140x705){
 
                 $insert = $this->course_model->add(
                     array(
                         "title"       => $this->input->post("title"),
                         "description" => $this->input->post("description"),
                         "url"         => convertToSEO($this->input->post("title")),
-                        "img_url"     => $uploaded_file,
+                        "img_url"     => $file_name,
                         "event_date"  => $this->input->post("event_date"),
                         "rank"        => 0,
                         "isActive"    => 1,
@@ -191,23 +186,19 @@ class Courses extends CI_Controller{
             if ($_FILES["img_url"]["name"] !== ""){
 
                 $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-                $config["allowed_types"] = "jpg|jpeg|png";
-                $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-                $config["file_name"]     = $file_name;
+                $image_255x157 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 255,157, $file_name);
+                $image_1140x705 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 1140,705, $file_name);
 
-                $this->load->library("upload", $config);
-
-                $upload = $this->upload->do_upload("img_url");
-
-                if($upload){
-                    $uploaded_file = $this->upload->data("file_name");
+                if($image_255x157 && $image_1140x705){
+                    delete_picture("course_model", $id, "255x157");
+                    delete_picture("course_model", $id, "1140x705");
 
                     $data =  array(
                         "title"       => $this->input->post("title"),
                         "description" => $this->input->post("description"),
                         "event_date"  => $this->input->post("event_date"),
                         "url"         => convertToSEO($this->input->post("title")),
-                        "img_url"   => $uploaded_file,
+                        "img_url"   => $file_name,
                     );
 
                 }else{
@@ -275,6 +266,9 @@ class Courses extends CI_Controller{
     }
 
     public function delete($id){
+
+        delete_picture("course_model", $id, "255x157");
+        delete_picture("course_model", $id, "1140x705");
         $delete = $this->course_model->delete(
             array(
                 "id" => $id
