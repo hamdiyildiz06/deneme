@@ -24,8 +24,8 @@
                         <div id="control-demo-6" class="" >
                             <?php if (isset($form_error)){ ?>
                                 <select class="form-control news_type_select" name="news_type">
-                                    <option <?= ($news_type == "image") ? "selected" : ""; ?> value="image">Resim</option>
-                                    <option <?= ($news_type == "video") ? "selected" : ""; ?> value="video">Video</option>
+                                    <option <?= ($item->news_type == "image") ? "selected" : ""; ?> value="image">Resim</option>
+                                    <option <?= ($item->news_type == "video") ? "selected" : ""; ?> value="video">Video</option>
                                 </select>
                             <?php }else { ?>
                                 <select class="form-control news_type_select" name="news_type">
@@ -53,16 +53,16 @@
                     <?php } else { ?>
 
                         <div class="row">
-                            <div class="col-md-1 image_upload_container">
-                                <img src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>" alt="" class="img-responsive" >
+                            <div class="col-md-1 image_upload_container" style="display: <?= ($item->news_type != "video") ? "block" : "none"; ?>">
+                                <img src="<?= get_picture($viewFolder, $item->img_url,"513x289"); ?>" alt="" class="img-responsive" >
                             </div>
 
-                            <div class="col-md-11 form-group image_upload_container"style="display: <?= ($item->news_type == "image") ? "block" : "none"; ?>">
+                            <div class="col-md-11 form-group image_upload_container" style="display: <?= ($item->news_type == "image") ? "block" : "none"; ?>">
                                 <label for="exampleInputFile">Görsel Seçiniz</label>
                                 <input type="file" name="img_url" id="exampleInputFile" class="form-control">
                             </div>
                         </div>
-                        <div class="form-group video_url_container"style="display: <?= ($item->news_type == "video") ? "block" : "none"; ?>">
+                        <div class="form-group video_url_container" style="display: <?= ($item->news_type == "video") ? "block" : "none"; ?>">
                             <label for="exampleInputEmail1">video URL</label>
                             <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Video bağlantısını buraya yapıştırınız..." name="video_url" value="<?= $item->video_url; ?>">
                         </div>

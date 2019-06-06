@@ -223,3 +223,14 @@ function get_picture($path = "", $picture = "", $resolution = "50x50"){
     return $picture;
 
 }
+
+function delete_picture($model,$id,$resolution){
+    $t = get_instance();
+    $fileName =  $t->$model->get(
+        array(
+            "id" => $id
+        )
+    );
+
+    return unlink("uploads/{$t->viewFolder}/{$resolution}/{$fileName->img_url}");
+}
