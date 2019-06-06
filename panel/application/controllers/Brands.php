@@ -78,21 +78,14 @@ class Brands extends CI_Controller{
         if($validate){
 
             $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-            $config["allowed_types"] = "jpg|jpeg|png";
-            $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-            $config["file_name"]     = $file_name;
+            $image_350x216 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 350,216, $file_name);
 
-            $this->load->library("upload", $config);
-
-            $upload = $this->upload->do_upload("img_url");
-
-            if($upload){
-                $uploaded_file = $this->upload->data("file_name");
+            if($image_350x216){
 
                 $insert = $this->brand_model->add(
                     array(
                         "title"       => $this->input->post("title"),
-                        "img_url"     => $uploaded_file,
+                        "img_url"     => $file_name,
                         "rank"        => 0,
                         "isActive"    => 1,
                         "createdAt"   => date("Y-m-d H:i:s ")
@@ -187,20 +180,13 @@ class Brands extends CI_Controller{
             if ($_FILES["img_url"]["name"] !== ""){
 
                 $file_name = convertToSEO(pathinfo($_FILES['img_url']['name'], PATHINFO_FILENAME)) . "." . pathinfo($_FILES['img_url']['name'], PATHINFO_EXTENSION);
-                $config["allowed_types"] = "jpg|jpeg|png";
-                $config["upload_path"]   = "uploads/{$this->viewFolder}/";
-                $config["file_name"]     = $file_name;
+                $image_350x216 = upload_picture($_FILES["img_url"]["tmp_name"], "uploads/{$this->viewFolder}", 350,216, $file_name);
 
-                $this->load->library("upload", $config);
-
-                $upload = $this->upload->do_upload("img_url");
-
-                if($upload){
-                    $uploaded_file = $this->upload->data("file_name");
-
+                if($image_350x216){
+                    delete_picture("brand_model", $id, "350x216");
                     $data =  array(
                         "title"       => $this->input->post("title"),
-                        "img_url"   => $uploaded_file,
+                        "img_url"   => $file_name,
                     );
 
                 }else{
@@ -265,6 +251,7 @@ class Brands extends CI_Controller{
     }
 
     public function delete($id){
+        delete_picture("brand_model", $id, "350x216");
         $delete = $this->brand_model->delete(
             array(
                 "id" => $id

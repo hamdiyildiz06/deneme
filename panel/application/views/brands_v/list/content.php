@@ -32,7 +32,7 @@
                         <th class="text-center"><?= $item->id; ?></th>
                         <td><?= $item->title; ?></td>
                         <td class="text-center w150">
-                            <img width="75" src="<?= base_url("uploads/{$viewFolder}/{$item->img_url}") ?>" alt="" class="img-rounded">
+                            <img width="75" src="<?= get_picture($viewFolder,$item->img_url, "350x216"); ?>" alt="" class="img-rounded">
                         </td>
                         <td class="text-center w100">
                             <input
